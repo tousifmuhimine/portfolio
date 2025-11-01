@@ -1,10 +1,7 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
 
+/* ---------- Custom Tailwind Theme Inline ---------- */
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
@@ -12,15 +9,66 @@
   --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+
+body {
+  font-family: 'Inter', sans-serif;
+  background-color: var(--background);
+  color: var(--foreground);
+}
+
+/* ---------- Components Layer ---------- */
+@layer components {
+  .skill-pill {
+  @apply inline-block text-sm font-medium px-3 py-1 rounded-full transition-transform;
+  color: black;
+  background-color: var(--accent); /* default background if no color set */
+}
+
+}
+
+/* ---------- Root Variables ---------- */
+
+:root {
+  --background: #111827;
+  --foreground: #F9FAFB;
+  --secondary-text: #9CA3AF;
+  --card-bg: #1F2937; /* dark gray for card background */
+  --accent: #3B82F6;  /* Tailwind blue-500 */
+}
+
+@layer utilities {
+  .text-gradient {
+    background: linear-gradient(90deg, #3b82f6, #8b5cf6, #ec4899, #f59e0b);
+    background-size: 300%;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: gradient-move 6s linear infinite;
+  }
+
+  @keyframes gradient-move {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
+
+  .fade-up {
+    opacity: 0;
+    transform: translateY(10px);
+    animation: fadeUp 1s ease forwards;
+  }
+
+  @keyframes fadeUp {
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+.text-accent {
+  color: var(--accent);
+}
+
+.hover\:text-accent:hover {
+  color: var(--accent);
 }
