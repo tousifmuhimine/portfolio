@@ -8,28 +8,27 @@ import { Mail, Github, Linkedin, MapPin } from 'lucide-react';
 const projectsData: Project[] = [
   {
     title: "🌊 Flood Forecasting Chatbot",
-    techStack: "Python, LangChain, Gemma2:2B, Scikit-learn, Node.js, Visual Crossing API, MongoDB",
-    description: "A hybrid AI chatbot for real-time flood forecasting. Uses a custom-trained ML model for core predictions and Gemma2:2B for natural language interface.",
+    techStack: "Python, Streamlit, LangChain, Gemma2:2B, Scikit-learn, ML model (.pkl), JSON dataset",
+    description: "A hybrid AI chatbot for real-time flood forecasting. Uses a custom-trained ML model for predictions and Gemma2:2B for natural conversation.",
     highlights: [
       "Hybrid AI: ML model for forecasting + LLM for conversation",
-      "LLM reasoning integrated with live weather data",
-      "Validates forecasts using training dataset references",
-      "Built for reliability and easy web deployment"
+      "Streamlit interface for easy deployment",
+      "Fine-tuned on local JSON dataset",
+      "Validates forecasts using training dataset references"
     ],
     imageUrl: "/images/projects/flood-chatbot.png",
     metrics: "90% accuracy in flood prediction",
     githubUrl: "https://github.com/tousifmuhimine/Flood-Forecasting-BD",
-    
   },
   {
     title: "⚛️ Physics Chatbot",
-    techStack: "Python, LLaMA-Factory, LangChain, Node.js, React",
-    description: "An intelligent assistant designed to solve and explain physics problems with custom fine-tuned LLM for conceptual and numeric reasoning.",
+    techStack: "Python, Streamlit, LangChain, HuggingFace Vector DB",
+    description: "An intelligent assistant that solves and explains physics problems using raw Python code, LangChain, and a HuggingFace vector database.",
     highlights: [
-      "Custom fine-tuned LLM trained via LLaMA-Factory",
-      "Node.js-powered API for fast, scalable inference",
-      "Step-by-step derivation explanations",
-      "Built for educational platforms"
+      "Detects physics questions and provides follow-up answers",
+      "Raw Python code for all computation and logic",
+      "Streamlit interface for interactive use",
+      "LangChain integrated for reasoning"
     ],
     imageUrl: "/images/projects/physics-chatbot.png",
     metrics: "Handles 500+ physics concepts",
@@ -37,12 +36,12 @@ const projectsData: Project[] = [
   },
   {
     title: "📚 Bouncy Book Store",
-    techStack: "React, Node.js, Express, MongoDB",
-    description: "A responsive full-stack bookstore with dynamic cart management, product search, and authentication.",
+    techStack: "Node.js, TypeScript, React, Supabase",
+    description: "A full-stack bookstore application with dynamic cart management, search, authentication, and real-time inventory updates. Frontend and backend integrated together.",
     highlights: [
       "Secure JWT-based authentication",
-      "Modular Node.js API with database flexibility",
-      "Smooth, minimal React interface",
+      "Supabase backend for database and auth",
+      "Responsive React frontend",
       "Real-time cart and inventory management"
     ],
     imageUrl: "/images/projects/bouncy-bookstore.png",
@@ -52,20 +51,21 @@ const projectsData: Project[] = [
   },
   {
     title: "🧩 Data Structure Learning LLM",
-    techStack: "Python, LangChain, Node.js, React, MongoDB",
-    description: "An AI-powered DSA tutor that teaches and visualizes algorithms interactively with natural language explanations.",
+    techStack: "Python backend, Node.js & TypeScript frontend, Supabase, PG Vector, Langraph, MCP Server",
+    description: "An AI-powered DSA tutor that teaches and visualizes algorithms interactively. Backend and frontend implemented separately with self-learning via Supabase PG Vector.",
     highlights: [
       "LLM explains code, logic, and algorithm behavior",
       "Real-time visualization of data structures",
-      "Interactive learning experience",
-      "Covers stack, queue, tree, and graph operations"
+      "Self-learning via Supabase PG Vector",
+      "Backend and frontend developed separately"
     ],
     imageUrl: "/images/projects/dsa-learning.png",
     metrics: "Used by 200+ students",
     githubUrl: "https://github.com/tousifmuhimine/data-structure-ai",
-    liveUrl: "https://dsa-chatbot-demo.vercel.app"  //have to change it later
+    liveUrl: "https://dsa-chatbot-demo.vercel.app"
   }
 ];
+
 
 const skills = {
   "AI & ML": ["Python", "TensorFlow", "PyTorch", "Scikit-learn", "OpenCV"],
