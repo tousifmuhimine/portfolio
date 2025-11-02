@@ -18,7 +18,7 @@ const projectsData: Project[] = [
     ],
     imageUrl: "/images/projects/flood-chatbot.png",
     metrics: "90% accuracy in flood prediction",
-    githubUrl: "https://github.com/tousif-muhimine/flood-forecasting-chatbot",
+    githubUrl: "https://github.com/tousifmuhimine/Flood-Forecasting-BD",
     
   },
   {
@@ -62,8 +62,8 @@ const projectsData: Project[] = [
     ],
     imageUrl: "/images/projects/dsa-learning.png",
     metrics: "Used by 200+ students",
-    githubUrl: "https://github.com/tousif-muhimine/dsa-learning-llm",
-    liveUrl: "https://flood-chatbot-demo.vercel.app"
+    githubUrl: "https://github.com/tousifmuhimine/data-structure-ai",
+    liveUrl: "https://dsa-chatbot-demo.vercel.app"  //have to change it later
   }
 ];
 
