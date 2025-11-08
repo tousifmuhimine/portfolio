@@ -114,16 +114,16 @@ export default function Home() {
 
           {/* Center - Profile */}
           <div className="flex-1 flex flex-col items-center relative">
-            <div className="relative w-72 h-72 md:w-80 md:h-80 mb-6">
-              <div className="absolute inset-0 bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 rounded-full opacity-30 blur-3xl animate-pulse-slow"></div>
-              <div className="relative w-full h-full rounded-full overflow-hidden border-4 border-gray-700 shadow-2xl shadow-blue-500/50 bg-gradient-to-br from-gray-800 to-gray-900 flex items-center justify-center text-6xl text-white">
+            <div className="relative w-80 h-64 md:w-96 md:h-72 mb-6">
+              <div className="absolute inset-0 bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 rounded-3xl opacity-30 blur-3xl animate-pulse-slow"></div>
+              <div className="relative w-full h-full rounded-3xl overflow-hidden border-4 border-gray-700 shadow-2xl shadow-blue-500/50 bg-gradient-to-br from-gray-800 to-gray-900 flex items-center justify-center text-6xl text-white">
                 <img 
-                  src="/images/profile-photo.jpg" 
+                  src="/images/profile-photo.png" 
                   alt="Abdullah Al Muhimine"
                   className="w-full h-full object-cover"
   />
               </div>
-              <div className="absolute inset-0 rounded-full border-2 border-blue-500/30 animate-ping-slow"></div>
+              <div className="absolute inset-0 rounded-3xl border-2 border-blue-500/30 animate-ping-slow"></div>
             </div>
             <h1 className="text-3xl md:text-4xl font-bold text-white mb-1 text-center">
               Abdullah Al Muhimine
