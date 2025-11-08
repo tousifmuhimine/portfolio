@@ -269,7 +269,7 @@ export default function Home() {
               </a>
 
               <a
-                href="linkedin.com/in/tousifmuhimine"
+                href="https://linkedin.com/in/tousifmuhimine"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex items-center gap-4 text-lg hover:text-blue-400 transition-all group"
