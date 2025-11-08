@@ -175,10 +175,10 @@ export default function Home() {
               </span>
             </h2>
             <p className="text-gray-300 text-lg leading-relaxed">
-              I started my journey in AI fascinated by how machines could learn and reason. Today, I bridge the gap between cutting-edge AI research and real-world applications. My goal is simple: build intelligent systems that actually solve problems and make people's lives easier.
+              I started my AI journey by building chatbots — that’s where I first discovered how exciting it is to make machines understand and respond intelligently. From there, I dove deep into machine learning and deep learning projects, exploring how models can truly solve real-world problems. On the full-stack side, I began with React and now feel fully at home with Node.js and TypeScript, building end-to-end intelligent applications.
             </p>
             <p className="text-gray-400">
-              When I'm not coding, I'm exploring new AI papers, contributing to open-source, or helping students learn data structures and algorithms.
+              When I’m not coding, I love diving into AI research papers and exploring new problem-solving ideas that push the boundaries of what AI can do.
             </p>
           </div>
         </section>
