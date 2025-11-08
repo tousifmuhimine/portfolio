@@ -62,7 +62,7 @@ const projectsData: Project[] = [
     imageUrl: "/images/projects/dsa-learning.png",
     metrics: "Used by 200+ students",
     githubUrl: "https://github.com/tousifmuhimine/data-structure-ai",
-    liveUrl: "https://data-structure-ai.vercel.app/chat"
+    liveUrl: "https://data-structure-ai.vercel.app/"
   }
 ];
 
