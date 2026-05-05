@@ -1,300 +1,454 @@
 'use client';
 
+import Image from 'next/image';
 import Header from '../components/Header';
 import ProjectCard, { Project } from '../components/ProjectCard';
 import FloatingElements from '../components/FloatingElements';
-import { Mail, Github, Linkedin, MapPin } from 'lucide-react';
+import {
+  ArrowUpRight,
+  BrainCircuit,
+  Code2,
+  Database,
+  Download,
+  Github,
+  GraduationCap,
+  Layers3,
+  Linkedin,
+  Mail,
+  MapPin,
+  Network,
+  Sparkles,
+  TerminalSquare,
+} from 'lucide-react';
+
+const resumeTracks = [
+  {
+    label: 'AF Resume',
+    title: 'AI Full-Stack Allrounder',
+    href: '/resumeAF.pdf',
+    tone: 'Systems, AI products, backend, frontend, deployment',
+    summary:
+      'Best for roles that need one engineer who can connect LLM reasoning, production web apps, APIs, databases, and deployment.',
+  },
+  {
+    label: 'Resume A',
+    title: 'AI Engineer',
+    href: '/others/resumeA.pdf',
+    tone: 'LLMs, RAG, multi-agent systems, model evaluation',
+    summary:
+      'Focused on LangChain, LangGraph, Ollama, fine-tuning, PGVector retrieval, and AI application workflows.',
+  },
+  {
+    label: 'Resume F',
+    title: 'Full-Stack / Backend Engineer',
+    href: '/others/resumeF.pdf',
+    tone: 'Node.js, FastAPI, REST APIs, auth, databases',
+    summary:
+      'Built for backend and full-stack roles involving React, Next.js, Supabase, PostgreSQL, JWT auth, and API security.',
+  },
+  {
+    label: 'Resume M',
+    title: 'ML / DL Engineer',
+    href: '/others/resumeM.pdf',
+    tone: 'ML, deep learning, research, model validation',
+    summary:
+      'Highlights supervised learning, feature engineering, CNNs, sequence modeling, multimodal learning, and research methods.',
+  },
+];
 
 const projectsData: Project[] = [
   {
-    title: "🌊 Flood Forecasting Chatbot",
-    techStack: "Python, Streamlit, LangChain, Gemma2:2B, Scikit-learn, ML model (.pkl), JSON dataset",
-    description: "A hybrid AI chatbot for real-time flood forecasting. Uses a custom-trained ML model for predictions and Gemma2:2B for natural conversation.",
+    title: 'PorteHobe AI',
+    category: 'Capstone AI Reasoning',
+    techStack: 'Gemma 3:4B, Ollama, LangGraph, GSM8K, Python, LLM fine-tuning',
+    description:
+      'A math reasoning AI capstone built around open-source LLM refinement, benchmark-driven evaluation, and task-specialized reasoning workflows.',
     highlights: [
-      "Hybrid AI: ML model for forecasting + LLM for conversation",
-      "Streamlit interface for easy deployment",
-      "Fine-tuned on local JSON dataset",
-      "Validates forecasts using training dataset references"
+      'Fine-tuned Gemma 3:4B with supervised instruction tuning for mathematical reasoning.',
+      'Benchmarked against Mathstral and Gemini-style baselines with GSM8K evaluation.',
+      'Improved reasoning accuracy by 15% through dataset curation and model refinement.',
     ],
-    imageUrl: "/images/projects/flood-chatbot.png",
-    metrics: "90% accuracy in flood prediction",
-    githubUrl: "https://github.com/tousifmuhimine/Flood-Forecasting-BD",
+    imageUrl: '/images/projects/physics-chatbot.png',
+    metrics: '15% reasoning accuracy gain',
+    githubUrl: 'https://github.com/tousifmuhimine',
   },
   {
-    title: "⚛️ Physics Chatbot",
-    techStack: "Python, Streamlit, LangChain, HuggingFace Vector DB",
-    description: "An intelligent assistant that solves and explains physics problems using raw Python code, LangChain, and a HuggingFace vector database.",
+    title: 'Data Structure Learning LLM',
+    category: 'AI Education Platform',
+    techStack: 'Python, FastAPI, LangGraph, MCP Server, Supabase, PGVector, TypeScript',
+    description:
+      'An AI-powered DSA tutor that explains code, visualizes algorithms, and serves context-aware educational content from a backend-first architecture.',
     highlights: [
-      "Detects physics questions and provides follow-up answers",
-      "Raw Python code for all computation and logic",
-      "Streamlit interface for interactive use",
-      "LangChain integrated for reasoning"
+      'Built LLM reasoning workflows with LangGraph and MCP Server.',
+      'Designed APIs for context-aware query handling and vector-based retrieval.',
+      'Created interactive learning flows for algorithms and data structures.',
     ],
-    imageUrl: "/images/projects/physics-chatbot.png",
-    metrics: "Handles 500+ physics concepts",
-    githubUrl: "https://github.com/tousifmuhimine/Physics-Chatbot"
+    imageUrl: '/images/projects/dsa-learning.png',
+    metrics: 'LLM tutor with retrieval memory',
+    githubUrl: 'https://github.com/tousifmuhimine/data-structure-ai',
+    liveUrl: 'https://data-structure-ai.vercel.app/',
   },
   {
-    title: "📚 Bouncy Book Store",
-    techStack: "Node.js, TypeScript, React, Supabase",
-    description: "A full-stack bookstore application with dynamic cart management, search, authentication, and real-time inventory updates. Frontend and backend integrated together.",
+    title: 'Bouncy Book Store',
+    category: 'Full-Stack E-commerce',
+    techStack: 'React, Next.js, Node.js, TypeScript, Supabase, PostgreSQL, JWT',
+    description:
+      'A full-stack bookstore with role-aware access, authentication, cart flows, inventory-aware data, and a polished responsive storefront.',
     highlights: [
-      "Secure JWT-based authentication",
-      "Supabase backend for database and auth",
-      "Responsive React frontend",
-      "Real-time cart and inventory management"
+      'Architected the application with React, Node.js, and Supabase PostgreSQL.',
+      'Designed REST APIs with JWT authentication and role-aware access control.',
+      'Connected product, cart, and inventory workflows across frontend and backend.',
     ],
-    imageUrl: "/images/projects/bouncy-bookstore.png",
-    metrics: "Built for 1000+ concurrent users",
-    liveUrl: "https://bouncybookstore.vercel.app/",
-    githubUrl: "https://github.com/tousifmuhimine/bouncy--bookstore"
+    imageUrl: '/images/projects/bouncy-bookstore.png',
+    metrics: 'Secure commerce workflow',
+    liveUrl: 'https://bouncybookstore.vercel.app/',
+    githubUrl: 'https://github.com/tousifmuhimine/bouncy--bookstore',
   },
   {
-    title: "🧩 Data Structure Learning LLM",
-    techStack: "Python backend, Node.js & TypeScript frontend, Supabase, PG Vector, Langraph, MCP Server",
-    description: "An AI-powered DSA tutor that teaches and visualizes algorithms interactively. Backend and frontend implemented separately with self-learning via Supabase PG Vector.",
+    title: 'Flood Forecasting AI System',
+    category: 'ML + Conversational AI',
+    techStack: 'Python, Streamlit, LangChain, Scikit-learn, Gemma2:2B, JSON datasets',
+    description:
+      'A hybrid flood forecasting system that combines supervised ML prediction with conversational LLM explanations for user-facing insight.',
     highlights: [
-      "LLM explains code, logic, and algorithm behavior",
-      "Real-time visualization of data structures",
-      "Self-learning via Supabase PG Vector",
-      "Backend and frontend developed separately"
+      'Developed a predictive model with time-series forecasting and 90% accuracy.',
+      'Engineered features from localized environmental datasets for prediction stability.',
+      'Integrated forecast outputs with an explanation engine and visual interface.',
     ],
-    imageUrl: "/images/projects/dsa-learning.png",
-    metrics: "Used by 200+ students",
-    githubUrl: "https://github.com/tousifmuhimine/data-structure-ai",
-    liveUrl: "https://data-structure-ai.vercel.app/"
-  }
+    imageUrl: '/images/projects/flood-chatbot.png',
+    metrics: '90% flood prediction accuracy',
+    githubUrl: 'https://github.com/tousifmuhimine/Flood-Forecasting-BD',
+  },
+  {
+    title: 'Physics RAG Chatbot',
+    category: 'Retrieval-Augmented Assistant',
+    techStack: 'Python, Streamlit, LangChain, PGVector, Hugging Face embeddings',
+    description:
+      'A physics assistant that uses semantic retrieval before answering, reducing hallucinations and grounding explanations in relevant context.',
+    highlights: [
+      'Developed a RAG system using vector search for context-grounded reasoning.',
+      'Reduced hallucinations through retrieval-first answering logic.',
+      'Built structured workflows for physics problem explanation and follow-up answers.',
+    ],
+    imageUrl: '/images/projects/physics-chatbot.png',
+    metrics: 'Retrieval-first reasoning',
+    githubUrl: 'https://github.com/tousifmuhimine/Physics-Chatbot',
+  },
+  {
+    title: 'Multimodal Sentiment Analysis',
+    category: 'Deep Learning Research',
+    techStack: 'Python, PyTorch, TensorFlow, CNNs, sequence modeling, video preprocessing',
+    description:
+      'A deep learning research project for detecting emotional sentiment from image and video inputs with refined temporal preprocessing.',
+    highlights: [
+      'Architected CNN-based and sequence models for multimodal sentiment detection.',
+      'Engineered temporal data preprocessing pipelines for video-based features.',
+      'Evaluated model behavior across image and sequence representations.',
+    ],
+    imageUrl: '/images/projects/flood-chatbot.png',
+    metrics: 'Image + video emotion modeling',
+    githubUrl: 'https://github.com/tousifmuhimine',
+  },
 ];
 
+const skills = [
+  {
+    title: 'LLMs & GenAI',
+    icon: BrainCircuit,
+    items: ['RAG', 'Multi-agent systems', 'Agent orchestration', 'LLM integration', 'Reasoning evaluation', 'GSM8K'],
+  },
+  {
+    title: 'ML & Deep Learning',
+    icon: Sparkles,
+    items: ['Supervised learning', 'Feature engineering', 'CNNs', 'Sequence modeling', 'Multimodal learning', 'Scikit-learn'],
+  },
+  {
+    title: 'Frameworks',
+    icon: Network,
+    items: ['LangChain', 'LangGraph', 'Ollama', 'TensorFlow', 'PyTorch', 'Streamlit'],
+  },
+  {
+    title: 'Backend',
+    icon: TerminalSquare,
+    items: ['Node.js', 'FastAPI', 'Django', 'REST APIs', 'JWT authentication', 'API security'],
+  },
+  {
+    title: 'Frontend',
+    icon: Code2,
+    items: ['React', 'Next.js', 'TypeScript', 'JavaScript', 'Tailwind CSS', 'HTML/CSS'],
+  },
+  {
+    title: 'Data & Tools',
+    icon: Database,
+    items: ['Supabase', 'PGVector', 'PostgreSQL', 'MySQL', 'MongoDB', 'Git/GitHub'],
+  },
+];
 
-const skills = {
-  "AI & ML": ["Python", "TensorFlow", "PyTorch", "Scikit-learn", "OpenCV"],
-  "Web Development": ["HTML", "CSS", "JavaScript", "TypeScript", "React.js"],
-  "Frameworks & Tools": ["Node.js", "Express", "Next.js", "LangChain", "LangGraph", "Streamlit"],
-  "Databases": ["MongoDB", "Supabase", "PostgreSQL", "SQL"],
-  "Cloud & DevOps": ["Vercel", "Render", "Git", "GitHub"]
-};
+const education = [
+  {
+    school: 'North South University',
+    detail: 'B.Sc. in Computer Science and Engineering',
+    meta: '2021-2025 | CGPA 3.44 | AI and Machine Learning track',
+  },
+  {
+    school: 'National Ideal College',
+    detail: 'Higher Secondary Certificate (HSC)',
+    meta: '2018-2020 | GPA 5.00',
+  },
+  {
+    school: 'Mohanogor Ideal School',
+    detail: 'Secondary School Certificate (SSC)',
+    meta: '2016-2018 | GPA 5.00',
+  },
+];
+
+const experience = [
+  {
+    company: 'FabricoMartBD',
+    role: 'Full-Stack Developer',
+    time: 'Dec 2025-April 2026',
+    place: 'Dhaka',
+    bullets: [
+      'Built the admin dashboard for internal business operations.',
+      'Developed and deployed CMS web platforms and supporting infrastructure for an international brand launch.',
+    ],
+  },
+];
+
+const stats = [
+  ['6+', 'AI and full-stack projects'],
+  ['15%', 'LLM reasoning accuracy gain'],
+  ['90%', 'Flood model accuracy'],
+  ['3.44', 'CSE CGPA'],
+];
 
 export default function Home() {
   return (
-    <div className="min-h-screen bg-gray-900 text-gray-100 relative overflow-hidden">
+    <div className="min-h-screen bg-[#0d1117] text-slate-100">
       <FloatingElements />
       <Header />
 
-      <main className="relative z-10 max-w-7xl mx-auto px-4 md:px-8">
+      <main>
+        <section id="about" className="hero-shell section-pad scroll-mt-24">
+          <div className="mx-auto grid min-h-screen w-full max-w-7xl items-center gap-12 px-5 pt-28 md:grid-cols-[1.05fr_0.95fr] md:px-8">
+            <div className="reveal-up max-w-3xl">
+              <div className="eyebrow">
+                <span className="live-dot" />
+                Available for AI, ML, and full-stack roles
+              </div>
+              <h1 className="mt-6 text-balance text-5xl font-semibold leading-tight text-white md:text-7xl">
+                Abdullah Al Muhimine
+                <span className="block text-slate-400">(Tousif)</span>
+              </h1>
+              <div className="typing-line mt-6" aria-label="AI full-stack engineer typing animation">
+                <span>AI Full-Stack Engineer</span>
+              </div>
+              <p className="mt-6 max-w-2xl text-lg leading-8 text-slate-300">
+                I build practical intelligent systems: LLM agents, retrieval pipelines, ML models, secure APIs,
+                and product-grade web applications. My strongest lane is turning AI ideas into usable software
+                with clean interfaces and reliable backend logic.
+              </p>
 
-        {/* Hero / About Section */}
-        <section id="about" className="min-h-screen flex flex-col md:flex-row items-center justify-center py-24 scroll-mt-20 gap-12">
-          
-          {/* Left - AI Developer */}
-          <div className="flex-1 text-left space-y-6">
-            <h2 className="text-4xl md:text-6xl font-bold text-white">
-              <span className="bg-gradient-to-r from-blue-400 via-purple-500 to-blue-600 bg-clip-text text-transparent">
-                AI Developer
-              </span>
-            </h2>
-            <p className="text-gray-400 text-lg">
-              Specializing in Machine Learning, Deep Learning & LLMs
-            </p>
-            <p className="text-gray-300">
-              Building intelligent systems powered by cutting-edge AI models. Expert in Python for model development, fine-tuning LLMs, and creating AI reasoning pipelines.
-            </p>
-            <div className="flex flex-wrap gap-2 pt-2">
-              <span className="px-4 py-2 bg-blue-600/20 text-blue-400 rounded-full text-sm font-medium border border-blue-500/30 hover:scale-110 transition-transform cursor-pointer">
-                TensorFlow
-              </span>
-              <span className="px-4 py-2 bg-purple-600/20 text-purple-400 rounded-full text-sm font-medium border border-purple-500/30 hover:scale-110 transition-transform cursor-pointer">
-                PyTorch
-              </span>
-              <span className="px-4 py-2 bg-pink-600/20 text-pink-400 rounded-full text-sm font-medium border border-pink-500/30 hover:scale-110 transition-transform cursor-pointer">
-                LangChain
-              </span>
+              <div className="mt-8 flex flex-wrap gap-3">
+                <a href="#projects" className="primary-action">
+                  View projects
+                  <ArrowUpRight size={18} />
+                </a>
+                <a href="#resumes" className="secondary-action">
+                  Download resumes
+                  <Download size={18} />
+                </a>
+              </div>
+
+              <div className="mt-10 grid grid-cols-2 gap-3 sm:grid-cols-4">
+                {stats.map(([value, label]) => (
+                  <div className="metric-tile" key={label}>
+                    <span>{value}</span>
+                    <p>{label}</p>
+                  </div>
+                ))}
+              </div>
             </div>
-          </div>
 
-          {/* Center - Profile */}
-          <div className="flex-1 flex flex-col items-center relative">
-            <div className="relative w-80 h-64 md:w-96 md:h-72 mb-6">
-              <div className="absolute inset-0 bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 rounded-3xl opacity-30 blur-3xl animate-pulse-slow"></div>
-              <div className="relative w-full h-full rounded-3xl overflow-hidden border-4 border-gray-700 shadow-2xl shadow-blue-500/50 bg-gradient-to-br from-gray-800 to-gray-900 flex items-center justify-center text-6xl text-white">
-                <img 
-                  src="/images/profile-photo.png" 
+            <div className="reveal-up delay-1 hero-portrait-wrap">
+              <div className="portrait-frame">
+                <Image
+                  src="/images/profile-photo.png"
                   alt="Abdullah Al Muhimine"
-                  className="w-full h-full object-cover"
-  />
+                  width={780}
+                  height={780}
+                  priority
+                  className="h-full w-full object-cover"
+                />
               </div>
-              <div className="absolute inset-0 rounded-3xl border-2 border-blue-500/30 animate-ping-slow"></div>
-            </div>
-            <h1 className="text-3xl md:text-4xl font-bold text-white mb-1 text-center">
-              Abdullah Al Muhimine
-            </h1>
-            <p className="text-lg text-gray-400 mb-2 text-center">(Tousif)</p>
-            <div className="flex justify-center gap-4">
-              <a href="https://github.com/tousifmuhimine" target="_blank" rel="noopener noreferrer" className="p-3 bg-gray-800 rounded-full hover:bg-blue-600 transition-all hover:scale-110">
-                <Github size={20} />
-              </a>
-              <a href="https://linkedin.com/in/tousifmuhimine" target="_blank" rel="noopener noreferrer" className="p-3 bg-gray-800 rounded-full hover:bg-blue-600 transition-all hover:scale-110">
-                <Linkedin size={20} />
-              </a>
+              <div className="role-console">
+                <div className="console-top">
+                  <span />
+                  <span />
+                  <span />
+                </div>
+                <p className="font-mono text-sm text-emerald-300">tousif@portfolio:~$</p>
+                <p className="mt-2 text-sm text-slate-300">
+                  shipping AI reasoning systems, retrieval apps, and full-stack products from Dhaka.
+                </p>
+              </div>
             </div>
           </div>
+        </section>
 
-          {/* Right - Full Stack Engineer */}
-          <div className="flex-1 text-left space-y-6">
-            <h2 className="text-4xl md:text-6xl font-bold text-white">
-              <span className="bg-gradient-to-r from-green-400 via-blue-500 to-green-600 bg-clip-text text-transparent">
-                Full-Stack Engineer
-              </span>
+        <section id="roles" className="section-pad scroll-mt-24">
+          <div className="mx-auto max-w-7xl px-5 md:px-8">
+            <div className="section-heading">
+              <p>Four ways to read my profile</p>
+              <h2>Same engineer, different role focus.</h2>
+            </div>
+            <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+              {resumeTracks.map((track, index) => (
+                <article className="track-card reveal-up" style={{ animationDelay: `${index * 90}ms` }} key={track.title}>
+                  <span>{track.label}</span>
+                  <h3>{track.title}</h3>
+                  <p>{track.summary}</p>
+                  <small>{track.tone}</small>
+                </article>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        <section id="projects" className="section-pad scroll-mt-24">
+          <div className="mx-auto max-w-7xl px-5 md:px-8">
+            <div className="section-heading">
+              <p>Selected work</p>
+              <h2>AI systems with real application layers.</h2>
+            </div>
+            <div className="grid grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-3">
+              {projectsData.map((project, index) => (
+                <ProjectCard key={project.title} project={project} index={index} />
+              ))}
+            </div>
+          </div>
+        </section>
+
+        <section id="skills" className="section-pad scroll-mt-24">
+          <div className="mx-auto max-w-7xl px-5 md:px-8">
+            <div className="section-heading">
+              <p>Resume-backed toolkit</p>
+              <h2>Skills across AI, ML, backend, and product UI.</h2>
+            </div>
+            <div className="skills-grid">
+              {skills.map(({ title, icon: Icon, items }) => (
+                <article className="skill-panel" key={title}>
+                  <div className="skill-icon">
+                    <Icon size={22} />
+                  </div>
+                  <h3>{title}</h3>
+                  <div className="skill-tags">
+                    {items.map((item) => (
+                      <span key={item}>{item}</span>
+                    ))}
+                  </div>
+                </article>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        <section id="experience" className="section-pad scroll-mt-24">
+          <div className="mx-auto grid max-w-7xl gap-8 px-5 md:grid-cols-[0.9fr_1.1fr] md:px-8">
+            <div className="section-heading sticky-heading">
+              <p>Foundation</p>
+              <h2>Experience and education from the resumes.</h2>
+            </div>
+            <div className="timeline">
+              {experience.map((item) => (
+                <article className="timeline-item" key={item.company}>
+                  <div className="timeline-dot" />
+                  <div>
+                    <span>{item.time} | {item.place}</span>
+                    <h3>{item.role} - {item.company}</h3>
+                    <ul>
+                      {item.bullets.map((bullet) => (
+                        <li key={bullet}>{bullet}</li>
+                      ))}
+                    </ul>
+                  </div>
+                </article>
+              ))}
+              {education.map((item) => (
+                <article className="timeline-item" key={item.school}>
+                  <div className="timeline-dot education-dot">
+                    <GraduationCap size={16} />
+                  </div>
+                  <div>
+                    <span>{item.meta}</span>
+                    <h3>{item.school}</h3>
+                    <p>{item.detail}</p>
+                  </div>
+                </article>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        <section id="resumes" className="section-pad scroll-mt-24">
+          <div className="mx-auto max-w-7xl px-5 md:px-8">
+            <div className="resume-band">
+              <div>
+                <div className="eyebrow">
+                  <Layers3 size={16} />
+                  Resume library
+                </div>
+                <h2>Download the version that matches the role.</h2>
+                <p>
+                  The portfolio presents you as one complete builder, while the downloads let recruiters choose
+                  the AI, full-stack, or ML/DL angle immediately.
+                </p>
+              </div>
+              <div className="resume-list">
+                {resumeTracks.map((resume) => (
+                  <a href={resume.href} download className="resume-link" key={resume.href}>
+                    <span>
+                      <strong>{resume.title}</strong>
+                      <small>{resume.label}</small>
+                    </span>
+                    <Download size={19} />
+                  </a>
+                ))}
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section id="contact" className="section-pad scroll-mt-24">
+          <div className="mx-auto max-w-4xl px-5 text-center md:px-8">
+            <p className="eyebrow mx-auto w-fit">Let&apos;s connect</p>
+            <h2 className="mt-5 text-4xl font-semibold text-white md:text-6xl">
+              Have an AI product, model, or backend that needs to become real?
             </h2>
-            <p className="text-gray-400 text-lg">
-              Crafting scalable web applications with modern tech
-            </p>
-            <p className="text-gray-300">
-              Building dynamic backends and interactive frontends with Node.js, React, and Next.js. Connecting AI models to polished web applications.
-            </p>
-            <div className="flex flex-wrap gap-2 pt-2">
-              <span className="px-4 py-2 bg-green-600/20 text-green-400 rounded-full text-sm font-medium border border-green-500/30 hover:scale-110 transition-transform cursor-pointer">
-                Node.js
-              </span>
-              <span className="px-4 py-2 bg-blue-600/20 text-blue-400 rounded-full text-sm font-medium border border-blue-500/30 hover:scale-110 transition-transform cursor-pointer">
-                React
-              </span>
-              <span className="px-4 py-2 bg-gray-600/20 text-gray-300 rounded-full text-sm font-medium border border-gray-500/30 hover:scale-110 transition-transform cursor-pointer">
-                Next.js
-              </span>
-            </div>
-          </div>
-        </section>
-
-        {/* My Story Section */}
-        <section className="py-16 md:py-24">
-          <div className="max-w-3xl mx-auto text-center space-y-6">
-            <h2 className="text-4xl md:text-5xl font-bold text-white">
-              <span className="bg-gradient-to-r from-blue-400 to-purple-600 bg-clip-text text-transparent">
-                My Story
-              </span>
-            </h2>
-            <p className="text-gray-300 text-lg leading-relaxed">
-              I started my AI journey by building chatbots — that’s where I first discovered how exciting it is to make machines understand and respond intelligently. From there, I dove deep into machine learning and deep learning projects, exploring how models can truly solve real-world problems. On the full-stack side, I began with React and now feel fully at home with Node.js and TypeScript, building end-to-end intelligent applications.
-            </p>
-            <p className="text-gray-400">
-              When I’m not coding, I love diving into AI research papers and exploring new problem-solving ideas that push the boundaries of what AI can do.
-            </p>
-          </div>
-        </section>
-
-        {/* Projects Section */}
-        <section id="projects" className="py-16 md:py-24 scroll-mt-20">
-          <h2 className="text-5xl font-bold mb-4 text-center">
-            <span className="bg-gradient-to-r from-blue-400 to-purple-600 bg-clip-text text-transparent">
-              Featured Projects
-            </span>
-          </h2>
-          <p className="text-center text-gray-400 mb-12">
-            Real-world applications that combine AI intelligence with practical usability
-          </p>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            {projectsData.map((project) => (
-              <ProjectCard key={project.title} project={project} />
-            ))}
-          </div>
-        </section>
-
-        {/* Skills Section */}
-        <section id="skills" className="py-16 md:py-24 scroll-mt-20">
-          <h2 className="text-5xl font-bold mb-4 text-center">
-            <span className="bg-gradient-to-r from-green-400 to-blue-600 bg-clip-text text-transparent">
-              Skills & Expertise
-            </span>
-          </h2>
-          <p className="text-center text-gray-400 mb-12">
-            A blend of AI, web, and full-stack development expertise
-          </p>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-5xl mx-auto">
-            {Object.entries(skills).map(([category, skillList]) => (
-              <div
-                key={category}
-                className="bg-gray-800/50 border border-gray-700 p-6 rounded-2xl shadow-lg backdrop-blur-sm"
-              >
-                <h3 className="text-2xl font-semibold mb-4 text-blue-400">{category}</h3>
-                <ul className="space-y-2 text-gray-300">
-                  {skillList.map((skill) => (
-                    <li key={skill} className="hover:text-blue-300 transition-colors">
-                      {skill}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            ))}
-          </div>
-        </section>
-
-        {/* Contact Section */}
-        <section id="contact" className="py-16 md:py-24 scroll-mt-20">
-          <h2 className="text-5xl font-bold mb-4 text-center">
-            <span className="bg-gradient-to-r from-purple-400 to-pink-600 bg-clip-text text-transparent">
-              Let's Connect
-            </span>
-          </h2>
-          <p className="text-center text-gray-400 mb-12">
-            Have a project in mind? Let's build something amazing together
-          </p>
-          <div className="max-w-2xl mx-auto bg-gray-800/50 backdrop-blur-sm border border-gray-700 rounded-xl p-8">
-            <div className="space-y-6">
-              <a
-                href="mailto:abdullahtsn13@gmail.com"
-                className="flex items-center gap-4 text-lg hover:text-blue-400 transition-all group"
-              >
-                <div className="p-3 bg-gray-700 rounded-lg group-hover:bg-blue-600 transition-all group-hover:scale-110">
-                  <Mail size={24} />
-                </div>
-                <span className="group-hover:translate-x-2 transition-transform">
-                  abdullahtsn13@gmail.com
-                </span>
+            <div className="contact-actions">
+              <a href="mailto:abdullahtsn13@gmail.com">
+                <Mail size={19} />
+                abdullahtsn13@gmail.com
               </a>
-
-              <a
-                href="https://github.com/tousifmuhimine"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center gap-4 text-lg hover:text-blue-400 transition-all group"
-              >
-                <div className="p-3 bg-gray-700 rounded-lg group-hover:bg-blue-600 transition-all group-hover:scale-110">
-                  <Github size={24} />
-                </div>
-                <span className="group-hover:translate-x-2 transition-transform">
-                  github.com/tousifmuhimine
-                </span>
+              <a href="https://github.com/tousifmuhimine" target="_blank" rel="noopener noreferrer">
+                <Github size={19} />
+                GitHub
               </a>
-
-              <a
-                href="https://linkedin.com/in/tousifmuhimine"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center gap-4 text-lg hover:text-blue-400 transition-all group"
-              >
-                <div className="p-3 bg-gray-700 rounded-lg group-hover:bg-blue-600 transition-all group-hover:scale-110">
-                  <Linkedin size={24} />
-                </div>
-                <span className="group-hover:translate-x-2 transition-transform">
-                  linkedin.com/in/tousifmuhimine
-                </span>
+              <a href="https://linkedin.com/in/tousifmuhimine" target="_blank" rel="noopener noreferrer">
+                <Linkedin size={19} />
+                LinkedIn
               </a>
-
-              <div className="flex items-center gap-4 text-lg text-gray-400">
-                <div className="p-3 bg-gray-700 rounded-lg">
-                  <MapPin size={24} />
-                </div>
-                <span>Bangladesh</span>
-              </div>
+              <span>
+                <MapPin size={19} />
+                Dhaka, Bangladesh
+              </span>
             </div>
           </div>
         </section>
       </main>
 
-      <footer className="text-center py-8 text-gray-500 border-t border-gray-800/50 mt-16 relative z-10">
-        <p>&copy; {new Date().getFullYear()} Abdullah Al Muhimine (Tousif). All rights reserved.</p>
+      <footer className="border-t border-white/10 px-5 py-8 text-center text-sm text-slate-500">
+        Copyright {new Date().getFullYear()} Abdullah Al Muhimine (Tousif). Built for AI, ML, and full-stack roles.
       </footer>
     </div>
   );

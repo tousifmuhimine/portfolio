@@ -1,9 +1,11 @@
 'use client';
 
-import { Github, ExternalLink } from 'lucide-react';
+import Image from 'next/image';
+import { ExternalLink, Github } from 'lucide-react';
 
 export interface Project {
   title: string;
+  category: string;
   techStack: string;
   description: string;
   highlights: string[];
@@ -15,89 +17,47 @@ export interface Project {
 
 interface ProjectCardProps {
   project: Project;
+  index?: number;
 }
 
-export default function ProjectCard({ project }: ProjectCardProps) {
+export default function ProjectCard({ project, index = 0 }: ProjectCardProps) {
   return (
-    <div className="group bg-gray-800/50 backdrop-blur-sm border border-gray-700 rounded-xl overflow-hidden hover:border-blue-500/50 transition-all duration-500 hover:shadow-2xl hover:shadow-blue-500/20 flex flex-col h-full">
-      {/* Image */}
-      <div className="relative overflow-hidden">
-        <img
-          src={project.imageUrl}
-          alt={`${project.title} screenshot`}
-          className="w-full h-64 md:h-80 object-cover transition-transform duration-500 group-hover:scale-105"
-          onError={(e) => {
-            const target = e.target as HTMLImageElement;
-            target.src =
-              'https://placehold.co/600x400/1F2937/9CA3AF?text=Add+Screenshot';
-          }}
-        />
-        <div className="absolute inset-0 bg-gradient-to-t from-gray-900 via-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+    <article className="project-card reveal-up" style={{ animationDelay: `${index * 70}ms` }}>
+      <div className="project-image">
+        <Image src={project.imageUrl} alt={`${project.title} screenshot`} width={900} height={620} />
+        <span>{project.category}</span>
       </div>
 
-      {/* Content */}
-      <div className="p-6 flex-grow flex flex-col">
-        <h3 className="text-xl font-bold mb-3 text-white group-hover:text-blue-400 transition-colors">
-          {project.title}
-        </h3>
-
-        {project.metrics && (
-          <div className="mb-3 px-3 py-1 bg-green-500/10 border border-green-500/30 rounded-lg text-green-400 text-sm font-medium inline-block w-fit">
-            📊 {project.metrics}
-          </div>
-        )}
-
-        <p className="text-gray-400 mb-4 text-sm leading-relaxed">
-          {project.description}
-        </p>
-
-        <div className="mb-4">
-          <h4 className="text-sm font-semibold mb-2 text-blue-400">
-            Key Features:
-          </h4>
-          <ul className="space-y-1 text-gray-400 text-sm">
-            {project.highlights.map((highlight, idx) => (
-              <li key={idx} className="flex items-start">
-                <span className="text-blue-500 mr-2">•</span>
-                <span>{highlight}</span>
-              </li>
-            ))}
-          </ul>
+      <div className="project-body">
+        <div>
+          <p className="project-metric">{project.metrics}</p>
+          <h3>{project.title}</h3>
+          <p className="project-description">{project.description}</p>
         </div>
 
-        <div className="mt-auto">
-          <p className="text-xs text-gray-500 mb-4">
-            <span className="font-semibold text-gray-400">Stack:</span>{' '}
-            {project.techStack}
-          </p>
+        <ul>
+          {project.highlights.map((highlight) => (
+            <li key={highlight}>{highlight}</li>
+          ))}
+        </ul>
 
-          <div className="flex gap-3">
-            {project.liveUrl && (
-              <a
-                href={project.liveUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-lg bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white transition-all hover:scale-105"
-              >
-                <ExternalLink size={16} />
-                Live Demo
-              </a>
-            )}
+        <p className="project-stack">{project.techStack}</p>
 
-            {project.githubUrl && (
-              <a
-                href={project.githubUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-lg bg-gray-700 hover:bg-gray-600 text-white transition-all hover:scale-105"
-              >
-                <Github size={16} />
-                Code
-              </a>
-            )}
-          </div>
+        <div className="project-actions">
+          {project.liveUrl && (
+            <a href={project.liveUrl} target="_blank" rel="noopener noreferrer" aria-label={`${project.title} live demo`}>
+              <ExternalLink size={17} />
+              Live
+            </a>
+          )}
+          {project.githubUrl && (
+            <a href={project.githubUrl} target="_blank" rel="noopener noreferrer" aria-label={`${project.title} source code`}>
+              <Github size={17} />
+              Code
+            </a>
+          )}
         </div>
       </div>
-    </div>
+    </article>
   );
 }

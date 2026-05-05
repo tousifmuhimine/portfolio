@@ -1,101 +1,85 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import { Menu, X, Download } from 'lucide-react';
+import { useEffect, useState } from 'react';
+import { Download, Menu, X } from 'lucide-react';
+
+const navItems = [
+  { name: 'About', href: '#about' },
+  { name: 'Roles', href: '#roles' },
+  { name: 'Projects', href: '#projects' },
+  { name: 'Skills', href: '#skills' },
+  { name: 'Experience', href: '#experience' },
+  { name: 'Contact', href: '#contact' },
+];
+
+const resumes = [
+  { name: 'AF', href: '/resumeAF.pdf' },
+  { name: 'AI', href: '/others/resumeA.pdf' },
+  { name: 'Full-stack', href: '/others/resumeF.pdf' },
+  { name: 'ML/DL', href: '/others/resumeM.pdf' },
+];
 
 export default function Header() {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
 
   useEffect(() => {
-    const handleScroll = () => {
-      setScrolled(window.scrollY > 50);
-    };
+    const handleScroll = () => setScrolled(window.scrollY > 24);
+    handleScroll();
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  const navItems = [
-    { name: 'About', href: '#about' },
-    { name: 'Projects', href: '#projects' },
-    { name: 'Skills', href: '#skills' },
-    { name: 'Contact', href: '#contact' },
-  ];
-
   return (
-    <header
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        scrolled
-          ? 'bg-gray-900/95 backdrop-blur-md shadow-lg shadow-blue-500/10'
-          : 'bg-transparent'
-      } border-b border-gray-800/50`}
-    >
-      <nav className="max-w-6xl mx-auto flex items-center justify-between p-4 md:p-5">
-        <a href="#about" className="flex items-center gap-2 group">
-          <div className="relative">
-            <div className="absolute inset-0 bg-blue-500 rounded-lg blur-md opacity-50 group-hover:opacity-75 transition-opacity"></div>
-            <div className="relative text-2xl font-bold bg-gradient-to-r from-blue-400 to-purple-600 bg-clip-text text-transparent px-3 py-1">
-              AM
-            </div>
-          </div>
+    <header className={`site-header ${scrolled ? 'site-header--scrolled' : ''}`}>
+      <nav className="mx-auto flex max-w-7xl items-center justify-between px-5 py-4 md:px-8">
+        <a href="#about" className="brand-mark" aria-label="Go to top">
+          <span>AM</span>
+          <small>Tousif</small>
         </a>
 
-        {/* Desktop Menu */}
-        <div className="hidden md:flex items-center space-x-8">
+        <div className="hidden items-center gap-6 lg:flex">
           {navItems.map((item) => (
-            <a
-              key={item.name}
-              href={item.href}
-              className="relative font-medium text-gray-300 hover:text-white transition-colors group"
-            >
+            <a key={item.name} href={item.href} className="nav-link">
               {item.name}
-              <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-blue-400 to-purple-600 group-hover:w-full transition-all duration-300"></span>
             </a>
           ))}
-
-          <a
-            href="/resume.pdf"
-            download
-            className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 rounded-lg font-medium transition-all hover:scale-105"
-          >
-            <Download size={18} />
-            Resume
-          </a>
         </div>
 
-        {/* Mobile Menu Toggle */}
+        <div className="hidden items-center gap-2 md:flex">
+          {resumes.map((resume) => (
+            <a key={resume.name} href={resume.href} download className="resume-chip">
+              <Download size={15} />
+              {resume.name}
+            </a>
+          ))}
+        </div>
+
         <button
-          onClick={() => setIsOpen(!isOpen)}
-          className="md:hidden text-gray-400 hover:text-white transition-colors"
-          aria-label="Toggle menu"
+          type="button"
+          onClick={() => setIsOpen((value) => !value)}
+          className="mobile-menu-button lg:hidden"
+          aria-label="Toggle navigation"
+          aria-expanded={isOpen}
         >
-          {isOpen ? <X size={24} /> : <Menu size={24} />}
+          {isOpen ? <X size={22} /> : <Menu size={22} />}
         </button>
       </nav>
 
-      {/* Mobile Menu */}
       {isOpen && (
-        <div className="md:hidden bg-gray-800/95 backdrop-blur-md border-t border-gray-700">
-          <div className="flex flex-col p-4 space-y-2">
-            {navItems.map((item) => (
-              <a
-                key={item.name}
-                href={item.href}
-                className="block p-3 rounded-lg font-medium text-gray-300 hover:text-white hover:bg-gray-700 transition-all"
-                onClick={() => setIsOpen(false)}
-              >
-                {item.name}
+        <div className="mobile-panel lg:hidden">
+          {navItems.map((item) => (
+            <a key={item.name} href={item.href} onClick={() => setIsOpen(false)}>
+              {item.name}
+            </a>
+          ))}
+          <div className="grid grid-cols-2 gap-2 pt-2">
+            {resumes.map((resume) => (
+              <a key={resume.name} href={resume.href} download className="resume-chip justify-center">
+                <Download size={15} />
+                {resume.name}
               </a>
             ))}
-
-            <a
-              href="/resume.pdf"
-              download
-              className="flex items-center justify-center gap-2 p-3 bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg font-medium"
-            >
-              <Download size={18} />
-              Resume
-            </a>
           </div>
         </div>
       )}
