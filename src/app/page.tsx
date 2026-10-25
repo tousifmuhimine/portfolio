@@ -1,24 +1,29 @@
 'use client';
 
-import Image from 'next/image';
+import { useState } from 'react';
 import Header from '../components/Header';
-import ProjectCard, { Project } from '../components/ProjectCard';
-import FloatingElements from '../components/FloatingElements';
+import HeroSection from '../components/HeroSection';
+import TechMarquee from '../components/TechMarquee';
+import ScrollStorySection from '../components/ScrollStorySection';
+import RolesSection from '../components/RolesSection';
+import ProjectsSection from '../components/ProjectsSection';
+import SkillsSection from '../components/SkillsSection';
+import ExperienceSection from '../components/ExperienceSection';
+import ResumesSection from '../components/ResumesSection';
+import ContactSection from '../components/ContactSection';
+import Footer from '../components/Footer';
+import CustomCursor from '../components/CustomCursor';
+import Preloader from '../components/Preloader';
+import CommandPalette from '../components/CommandPalette';
+import TelemetryHUD from '../components/TelemetryHUD';
+import { Project } from '../components/ProjectCard';
 import {
-  ArrowUpRight,
   BrainCircuit,
+  Sparkles,
+  Network,
+  TerminalSquare,
   Code2,
   Database,
-  Download,
-  Github,
-  GraduationCap,
-  Layers3,
-  Linkedin,
-  Mail,
-  MapPin,
-  Network,
-  Sparkles,
-  TerminalSquare,
 } from 'lucide-react';
 
 const resumeTracks = [
@@ -190,23 +195,33 @@ const education = [
     detail: 'B.Sc. in Computer Science and Engineering',
     meta: '2021-2025 | CGPA 3.44 | AI and Machine Learning track',
   },
-  {
-    school: 'National Ideal College',
-    detail: 'Higher Secondary Certificate (HSC)',
-    meta: '2018-2020 | GPA 5.00',
-  },
-  {
-    school: 'Mohanogor Ideal School',
-    detail: 'Secondary School Certificate (SSC)',
-    meta: '2016-2018 | GPA 5.00',
-  },
 ];
 
 const experience = [
   {
+    company: 'Cognisor AI',
+    role: 'AI Engineer Intern',
+    time: 'July 2026 – Present',
+    place: 'Dhaka',
+    bullets: [
+      'Engineering and evaluating AI workflows, LLM agents, and retrieval-augmented generation (RAG) systems.',
+      'Integrating model reasoning pipelines, prompt architectures, and context-aware services.',
+    ],
+  },
+  {
+    company: 'Fleek BD',
+    role: 'Software Developer',
+    time: '2 months',
+    place: 'Dhaka',
+    bullets: [
+      'Contributed to web development, responsive user interfaces, and API integrations.',
+      'Assisted in platform feature rollouts, frontend performance optimization, and codebase maintenance.',
+    ],
+  },
+  {
     company: 'FabricoMartBD',
     role: 'Full-Stack Developer',
-    time: 'Dec 2025-April 2026',
+    time: 'Dec 2025 – April 2026',
     place: 'Dhaka',
     bullets: [
       'Built the admin dashboard for internal business operations.',
@@ -215,241 +230,48 @@ const experience = [
   },
 ];
 
-const stats = [
-  ['6+', 'AI and full-stack projects'],
+const stats: [string, string][] = [
+  ['6+', 'AI & full-stack systems'],
   ['15%', 'LLM reasoning accuracy gain'],
   ['90%', 'Flood model accuracy'],
-  ['3.44', 'CSE CGPA'],
+  ['3.44', 'CSE CGPA (AI/ML track)'],
 ];
 
 export default function Home() {
+  const [paletteOpen, setPaletteOpen] = useState(false);
+
   return (
-    <div className="min-h-screen bg-[#0d1117] text-slate-100">
-      <FloatingElements />
-      <Header />
+    <div className="relative min-h-screen bg-transparent text-[#ecebe6] selection:bg-[#3df5ff]/30 selection:text-white">
+      {/* Boot Preloader Sequence */}
+      <Preloader />
 
+      {/* Engineered Custom Cursor */}
+      <CustomCursor />
+
+      {/* Header */}
+      <Header onOpenPalette={() => setPaletteOpen(true)} />
+
+      {/* Main Content */}
       <main>
-        <section id="about" className="hero-shell section-pad scroll-mt-24">
-          <div className="mx-auto grid min-h-screen w-full max-w-7xl items-center gap-12 px-5 pt-28 md:grid-cols-[1.05fr_0.95fr] md:px-8">
-            <div className="reveal-up max-w-3xl">
-              <div className="eyebrow">
-                <span className="live-dot" />
-                Available for AI, ML, and full-stack roles
-              </div>
-              <h1 className="mt-6 text-balance text-5xl font-semibold leading-tight text-white md:text-7xl">
-                Abdullah Al Muhimine
-                <span className="block text-slate-400">(Tousif)</span>
-              </h1>
-              <div className="typing-line mt-6" aria-label="AI full-stack engineer typing animation">
-                <span>AI Full-Stack Engineer</span>
-              </div>
-              <p className="mt-6 max-w-2xl text-lg leading-8 text-slate-300">
-                I build practical intelligent systems: LLM agents, retrieval pipelines, ML models, secure APIs,
-                and product-grade web applications. My strongest lane is turning AI ideas into usable software
-                with clean interfaces and reliable backend logic.
-              </p>
-
-              <div className="mt-8 flex flex-wrap gap-3">
-                <a href="#projects" className="primary-action">
-                  View projects
-                  <ArrowUpRight size={18} />
-                </a>
-                <a href="#resumes" className="secondary-action">
-                  Download resumes
-                  <Download size={18} />
-                </a>
-              </div>
-
-              <div className="mt-10 grid grid-cols-2 gap-3 sm:grid-cols-4">
-                {stats.map(([value, label]) => (
-                  <div className="metric-tile" key={label}>
-                    <span>{value}</span>
-                    <p>{label}</p>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            <div className="reveal-up delay-1 hero-portrait-wrap">
-              <div className="portrait-frame">
-                <Image
-                  src="/images/profile-photo.png"
-                  alt="Abdullah Al Muhimine"
-                  width={780}
-                  height={780}
-                  priority
-                  className="h-full w-full object-cover"
-                />
-              </div>
-              <div className="role-console">
-                <div className="console-top">
-                  <span />
-                  <span />
-                  <span />
-                </div>
-                <p className="font-mono text-sm text-emerald-300">tousif@portfolio:~$</p>
-                <p className="mt-2 text-sm text-slate-300">
-                  shipping AI reasoning systems, retrieval apps, and full-stack products from Dhaka.
-                </p>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        <section id="roles" className="section-pad scroll-mt-24">
-          <div className="mx-auto max-w-7xl px-5 md:px-8">
-            <div className="section-heading">
-              <p>Four ways to read my profile</p>
-              <h2>Same engineer, different role focus.</h2>
-            </div>
-            <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
-              {resumeTracks.map((track, index) => (
-                <article className="track-card reveal-up" style={{ animationDelay: `${index * 90}ms` }} key={track.title}>
-                  <span>{track.label}</span>
-                  <h3>{track.title}</h3>
-                  <p>{track.summary}</p>
-                  <small>{track.tone}</small>
-                </article>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        <section id="projects" className="section-pad scroll-mt-24">
-          <div className="mx-auto max-w-7xl px-5 md:px-8">
-            <div className="section-heading">
-              <p>Selected work</p>
-              <h2>AI systems with real application layers.</h2>
-            </div>
-            <div className="grid grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-3">
-              {projectsData.map((project, index) => (
-                <ProjectCard key={project.title} project={project} index={index} />
-              ))}
-            </div>
-          </div>
-        </section>
-
-        <section id="skills" className="section-pad scroll-mt-24">
-          <div className="mx-auto max-w-7xl px-5 md:px-8">
-            <div className="section-heading">
-              <p>Resume-backed toolkit</p>
-              <h2>Skills across AI, ML, backend, and product UI.</h2>
-            </div>
-            <div className="skills-grid">
-              {skills.map(({ title, icon: Icon, items }) => (
-                <article className="skill-panel" key={title}>
-                  <div className="skill-icon">
-                    <Icon size={22} />
-                  </div>
-                  <h3>{title}</h3>
-                  <div className="skill-tags">
-                    {items.map((item) => (
-                      <span key={item}>{item}</span>
-                    ))}
-                  </div>
-                </article>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        <section id="experience" className="section-pad scroll-mt-24">
-          <div className="mx-auto grid max-w-7xl gap-8 px-5 md:grid-cols-[0.9fr_1.1fr] md:px-8">
-            <div className="section-heading sticky-heading">
-              <p>Foundation</p>
-              <h2>Experience and education from the resumes.</h2>
-            </div>
-            <div className="timeline">
-              {experience.map((item) => (
-                <article className="timeline-item" key={item.company}>
-                  <div className="timeline-dot" />
-                  <div>
-                    <span>{item.time} | {item.place}</span>
-                    <h3>{item.role} - {item.company}</h3>
-                    <ul>
-                      {item.bullets.map((bullet) => (
-                        <li key={bullet}>{bullet}</li>
-                      ))}
-                    </ul>
-                  </div>
-                </article>
-              ))}
-              {education.map((item) => (
-                <article className="timeline-item" key={item.school}>
-                  <div className="timeline-dot education-dot">
-                    <GraduationCap size={16} />
-                  </div>
-                  <div>
-                    <span>{item.meta}</span>
-                    <h3>{item.school}</h3>
-                    <p>{item.detail}</p>
-                  </div>
-                </article>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        <section id="resumes" className="section-pad scroll-mt-24">
-          <div className="mx-auto max-w-7xl px-5 md:px-8">
-            <div className="resume-band">
-              <div>
-                <div className="eyebrow">
-                  <Layers3 size={16} />
-                  Resume library
-                </div>
-                <h2>Download the version that matches the role.</h2>
-                <p>
-                  The portfolio presents you as one complete builder, while the downloads let recruiters choose
-                  the AI, full-stack, or ML/DL angle immediately.
-                </p>
-              </div>
-              <div className="resume-list">
-                {resumeTracks.map((resume) => (
-                  <a href={resume.href} download className="resume-link" key={resume.href}>
-                    <span>
-                      <strong>{resume.title}</strong>
-                      <small>{resume.label}</small>
-                    </span>
-                    <Download size={19} />
-                  </a>
-                ))}
-              </div>
-            </div>
-          </div>
-        </section>
-
-        <section id="contact" className="section-pad scroll-mt-24">
-          <div className="mx-auto max-w-4xl px-5 text-center md:px-8">
-            <p className="eyebrow mx-auto w-fit">Let&apos;s connect</p>
-            <h2 className="mt-5 text-4xl font-semibold text-white md:text-6xl">
-              Have an AI product, model, or backend that needs to become real?
-            </h2>
-            <div className="contact-actions">
-              <a href="mailto:abdullahtsn13@gmail.com">
-                <Mail size={19} />
-                abdullahtsn13@gmail.com
-              </a>
-              <a href="https://github.com/tousifmuhimine" target="_blank" rel="noopener noreferrer">
-                <Github size={19} />
-                GitHub
-              </a>
-              <a href="https://linkedin.com/in/tousifmuhimine" target="_blank" rel="noopener noreferrer">
-                <Linkedin size={19} />
-                LinkedIn
-              </a>
-              <span>
-                <MapPin size={19} />
-                Dhaka, Bangladesh
-              </span>
-            </div>
-          </div>
-        </section>
+        <HeroSection stats={stats} />
+        <TechMarquee />
+        <ScrollStorySection />
+        <RolesSection tracks={resumeTracks} />
+        <ProjectsSection projects={projectsData} />
+        <SkillsSection skills={skills} />
+        <ExperienceSection experience={experience} education={education} />
+        <ResumesSection tracks={resumeTracks} />
+        <ContactSection />
       </main>
 
-      <footer className="border-t border-white/10 px-5 py-8 text-center text-sm text-slate-500">
-        Copyright {new Date().getFullYear()} Abdullah Al Muhimine (Tousif). Built for AI, ML, and full-stack roles.
-      </footer>
+      {/* Footer */}
+      <Footer />
+
+      {/* Live System Telemetry HUD */}
+      <TelemetryHUD onOpenPalette={() => setPaletteOpen(true)} />
+
+      {/* Raycast-style Command Palette (⌘K) */}
+      <CommandPalette isOpen={paletteOpen} onClose={() => setPaletteOpen(false)} />
     </div>
   );
 }
