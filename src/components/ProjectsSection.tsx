@@ -72,7 +72,7 @@ export default function ProjectsSection({ projects }: ProjectsSectionProps) {
                 <span className="text-[#3df5ff]">Application Layers</span>
               </h2>
               <p className="mt-3 max-w-2xl font-mono text-xs text-white/50">
-                3D circular carousel wheel: scroll or drag to rotate through system architectures. Switch to Showcase for locked horizontal 3D cards.
+                Saturn-style 3D cosmic ring: scroll or drag to rotate through system architectures along the tilted orbital arc.
               </p>
             </div>
 

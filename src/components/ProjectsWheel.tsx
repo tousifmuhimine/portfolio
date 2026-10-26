@@ -143,6 +143,7 @@ export default function ProjectsWheel({ projects, onInspect }: ProjectsWheelProp
   return (
     <div
       ref={containerRef}
+      data-lenis-prevent
       className="relative select-none py-6 sm:py-12 touch-pan-y overflow-hidden"
       onMouseDown={handleMouseDown}
       onMouseMove={handleMouseMove}
@@ -153,9 +154,40 @@ export default function ProjectsWheel({ projects, onInspect }: ProjectsWheelProp
     >
       {/* 3D Circular Wheel Stage */}
       <div
-        className="relative mx-auto flex h-[480px] sm:h-[540px] md:h-[620px] w-full max-w-6xl items-center justify-center overflow-visible"
+        className="relative mx-auto flex h-[520px] sm:h-[580px] md:h-[660px] w-full max-w-6xl items-center justify-center overflow-visible"
         style={{ perspective: isMobile ? '1100px' : '1500px', transformStyle: 'preserve-3d' }}
       >
+        {/* Saturn Cosmic Planetary Ring Guide */}
+        <div
+          className="pointer-events-none absolute inset-0 flex items-center justify-center overflow-visible"
+          style={{
+            perspective: isMobile ? '1100px' : '1500px',
+            transformStyle: 'preserve-3d',
+          }}
+        >
+          {/* Outer Luminous Saturn Planetary Ring */}
+          <div
+            className="absolute rounded-[50%] border border-[#3df5ff]/35 opacity-70 pointer-events-none"
+            style={{
+              width: isMobile ? 'min(94vw, 560px)' : '1120px',
+              height: isMobile ? '240px' : '360px',
+              transform: 'rotateX(73deg) rotateZ(-3deg) translateY(80px)',
+              boxShadow: '0 0 50px rgba(61,245,255,0.22), inset 0 0 40px rgba(61,245,255,0.14)',
+              background: 'radial-gradient(ellipse at center, transparent 58%, rgba(61,245,255,0.08) 64%, transparent 74%)',
+            }}
+          />
+
+          {/* Secondary Dashed Inner Orbit Ring */}
+          <div
+            className="absolute rounded-[50%] border border-dashed border-[#c8ff3d]/25 opacity-45 pointer-events-none"
+            style={{
+              width: isMobile ? 'min(82vw, 470px)' : '940px',
+              height: isMobile ? '200px' : '300px',
+              transform: 'rotateX(73deg) rotateZ(-3deg) translateY(80px)',
+            }}
+          />
+        </div>
+
         {projects.map((project, idx) => {
           const offset = getOffset(idx);
           const isCenter = offset === 0;
@@ -166,17 +198,26 @@ export default function ProjectsWheel({ projects, onInspect }: ProjectsWheelProp
 
           if (!isVisible) return null;
 
-          // Responsive 3D Circular Arc Math
-          const radius = isMobile ? Math.min(310, windowWidth * 0.72) : 640;
-          const angleStep = isMobile ? 24 : 32;
+          // Saturn Ring Incline & Arc Math
+          const radius = isMobile ? Math.min(320, windowWidth * 0.74) : 660;
+          const angleStep = isMobile ? 26 : 34;
           const angleRad = (offset * angleStep * Math.PI) / 180;
 
           const translateX = Math.sin(angleRad) * radius;
-          const translateZ = (Math.cos(angleRad) - 1) * radius;
-          const rotateY = -offset * (isMobile ? 20 : angleStep);
+          const translateZ = (Math.cos(angleRad) - 1) * radius * 0.85;
 
-          const scale = isCenter ? 1 : isMobile ? 0.84 : Math.max(0.74, 1 - Math.abs(offset) * 0.14);
-          const opacity = isCenter ? 1 : isMobile ? 0.32 : Math.max(0.18, 0.55 - Math.abs(offset) * 0.2);
+          // Saturn Ring Elevation: Center card rests forward; before and after cards swoop upward along the ring
+          const translateY = isCenter
+            ? (isMobile ? 10 : 16)
+            : -Math.pow(Math.abs(offset), 1.28) * (isMobile ? 48 : 78);
+
+          // Banking tilt along the cosmic ring arc
+          const rotateY = -offset * (isMobile ? 22 : 28);
+          const rotateZ = offset * (isMobile ? -4.5 : -6.5);
+          const rotateX = isCenter ? -1 : 6 + Math.abs(offset) * 4;
+
+          const scale = isCenter ? 1 : isMobile ? 0.82 : Math.max(0.72, 1 - Math.abs(offset) * 0.15);
+          const opacity = isCenter ? 1 : isMobile ? 0.35 : Math.max(0.2, 0.6 - Math.abs(offset) * 0.18);
           const zIndex = 30 - Math.abs(offset) * 10;
 
           const formattedIndex = `0${idx + 1}`.slice(-2);
@@ -194,7 +235,7 @@ export default function ProjectsWheel({ projects, onInspect }: ProjectsWheelProp
               style={{
                 position: 'absolute',
                 width: isMobile ? 'min(330px, 86vw)' : 'min(460px, 88vw)',
-                transform: `translateX(${translateX}px) translateZ(${translateZ}px) rotateY(${rotateY}deg) scale(${scale})`,
+                transform: `translateX(${translateX}px) translateY(${translateY}px) translateZ(${translateZ}px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) rotateZ(${rotateZ}deg) scale(${scale})`,
                 opacity,
                 zIndex,
                 transition: 'all 0.65s cubic-bezier(0.16, 1, 0.3, 1)',

@@ -298,7 +298,11 @@ export default function CommandPalette({
 
   return (
     <AnimatePresence>
-      <div className="fixed inset-0 z-[10001] flex items-start justify-center p-4 pt-16 sm:pt-24">
+      <div
+        data-lenis-prevent
+        className="fixed inset-0 z-[10001] flex items-start justify-center p-4 pt-16 sm:pt-24"
+        onWheel={(e) => e.stopPropagation()}
+      >
         {/* Backdrop */}
         <motion.div
           initial={{ opacity: 0 }}

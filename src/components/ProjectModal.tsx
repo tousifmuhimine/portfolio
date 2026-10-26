@@ -16,12 +16,19 @@ export default function ProjectModal({ project, onClose }: ProjectModalProps) {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Escape') onClose();
     };
+
     if (project) {
       document.body.style.overflow = 'hidden';
+      // Pause smooth scroll engine while modal card is being viewed
+      const lenis = (window as unknown as { __lenis?: { stop: () => void; start: () => void } }).__lenis;
+      lenis?.stop();
       window.addEventListener('keydown', handleKeyDown);
     }
+
     return () => {
-      document.body.style.overflow = 'auto';
+      document.body.style.overflow = '';
+      const lenis = (window as unknown as { __lenis?: { stop: () => void; start: () => void } }).__lenis;
+      lenis?.start();
       window.removeEventListener('keydown', handleKeyDown);
     };
   }, [project, onClose]);
@@ -30,40 +37,51 @@ export default function ProjectModal({ project, onClose }: ProjectModalProps) {
 
   return (
     <AnimatePresence>
-      <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 md:p-10">
+      <div
+        data-lenis-prevent
+        className="fixed inset-0 z-[9999] flex items-center justify-center p-3 sm:p-6 pt-16 sm:pt-20 pb-6 sm:pb-8"
+        onWheel={(e) => e.stopPropagation()}
+        onTouchMove={(e) => e.stopPropagation()}
+      >
         {/* Backdrop */}
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           onClick={onClose}
-          className="absolute inset-0 bg-black/85 backdrop-blur-md"
+          className="absolute inset-0 bg-black/90 backdrop-blur-lg"
         />
 
-        {/* Modal Window */}
+        {/* Modal Window: Scaled and sized properly to fit cleanly within the viewport */}
         <motion.div
-          initial={{ opacity: 0, scale: 0.95, y: 20 }}
+          data-lenis-prevent
+          initial={{ opacity: 0, scale: 0.95, y: 15 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
-          exit={{ opacity: 0, scale: 0.95, y: 20 }}
-          transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
-          className="relative max-h-[92vh] w-full max-w-4xl overflow-y-auto rounded-2xl sm:rounded-3xl border border-white/20 bg-[#07080a] p-4 sm:p-6 md:p-8 text-[#ecebe6] shadow-2xl shadow-cyan-500/10"
+          exit={{ opacity: 0, scale: 0.95, y: 15 }}
+          transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
+          style={{ overscrollBehavior: 'contain' }}
+          className="relative max-h-[82vh] sm:max-h-[84vh] w-full max-w-3xl lg:max-w-4xl overflow-y-auto rounded-2xl sm:rounded-3xl border border-white/20 bg-[#07080a] p-5 sm:p-7 md:p-8 text-[#ecebe6] shadow-[0_0_80px_rgba(0,0,0,0.8)] shadow-cyan-500/10 custom-scrollbar"
+          onWheel={(e) => e.stopPropagation()}
         >
-          {/* Close Button */}
-          <button
-            type="button"
-            onClick={onClose}
-            className="absolute right-3 top-3 sm:right-4 sm:top-4 flex h-8 w-8 sm:h-9 sm:w-9 items-center justify-center rounded-full border border-white/10 bg-white/5 text-white/50 transition-colors hover:border-[#3df5ff] hover:text-[#3df5ff]"
-          >
-            <X size={16} />
-          </button>
+          {/* Sticky Close Button */}
+          <div className="sticky top-0 z-30 flex justify-end -mt-1 -mr-1 mb-2">
+            <button
+              type="button"
+              onClick={onClose}
+              className="flex h-9 w-9 items-center justify-center rounded-full border border-white/20 bg-[#07080a]/90 text-white/70 shadow-lg backdrop-blur-md transition-all hover:border-[#3df5ff] hover:text-[#3df5ff] hover:scale-105"
+              aria-label="Close modal"
+            >
+              <X size={16} />
+            </button>
+          </div>
 
           {/* Top Category & Metric Header */}
-          <div className="flex flex-wrap items-center gap-3 pr-10 font-mono">
-            <span className="border border-[#3df5ff]/40 bg-[#3df5ff]/10 px-3 py-1 text-xs font-bold text-[#3df5ff]">
+          <div className="flex flex-wrap items-center gap-2.5 sm:gap-3 pr-2 font-mono">
+            <span className="border border-[#3df5ff]/40 bg-[#3df5ff]/10 px-2.5 sm:px-3 py-1 text-xs font-bold text-[#3df5ff]">
               // {project.category}
             </span>
             {project.metrics && (
-              <span className="flex items-center gap-1.5 border border-[#c8ff3d]/40 bg-[#c8ff3d]/10 px-3 py-1 text-xs text-[#c8ff3d]">
+              <span className="flex items-center gap-1.5 border border-[#c8ff3d]/40 bg-[#c8ff3d]/10 px-2.5 sm:px-3 py-1 text-xs text-[#c8ff3d]">
                 <Sparkles size={12} />
                 {project.metrics}
               </span>
@@ -72,12 +90,12 @@ export default function ProjectModal({ project, onClose }: ProjectModalProps) {
           </div>
 
           {/* Title */}
-          <h2 className="mt-3 text-2xl font-black uppercase sm:text-3xl md:text-4xl text-white">
+          <h2 className="mt-3 text-xl font-black uppercase sm:text-2xl md:text-3xl text-white tracking-tight">
             {project.title}
           </h2>
 
-          {/* Screenshot Display */}
-          <div className="relative mt-6 aspect-[16/9] w-full overflow-hidden border border-white/10 bg-[#0d1017]">
+          {/* Screenshot Display - Contained height */}
+          <div className="relative mt-4 sm:mt-5 aspect-[16/9] max-h-[260px] sm:max-h-[320px] w-full overflow-hidden rounded-xl border border-white/10 bg-[#0d1017]">
             <Image
               src={project.imageUrl}
               alt={`${project.title} screenshot`}

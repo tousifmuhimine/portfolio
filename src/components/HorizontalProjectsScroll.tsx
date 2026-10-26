@@ -174,6 +174,7 @@ export default function HorizontalProjectsScroll({
   return (
     <div
       ref={containerRef}
+      data-lenis-prevent
       onMouseDown={handleMouseDown}
       onMouseMove={handleMouseMove}
       onMouseUp={handleMouseUp}
