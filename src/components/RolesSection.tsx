@@ -58,7 +58,7 @@ export default function RolesSection({ tracks }: RolesSectionProps) {
         </SectionReveal>
 
         <motion.div
-          className="grid gap-5 md:grid-cols-2 xl:grid-cols-4"
+          className="grid gap-5 md:grid-cols-2 xl:grid-cols-4 min-w-0 max-w-full"
           variants={containerVariants}
           initial="hidden"
           whileInView="visible"
@@ -67,7 +67,7 @@ export default function RolesSection({ tracks }: RolesSectionProps) {
           {tracks.map((track, i) => (
             <motion.article
               key={track.title}
-              className="group relative flex flex-col justify-between border border-white/10 bg-[#07080a] p-6 backdrop-blur-xl transition-all duration-300 hover:border-[#3df5ff]/50 hover:shadow-[0_0_30px_rgba(61,245,255,0.08)]"
+              className="group relative flex flex-col justify-between border border-white/10 bg-[#07080a] p-5 sm:p-6 backdrop-blur-xl transition-all duration-300 hover:border-[#3df5ff]/50 hover:shadow-[0_0_30px_rgba(61,245,255,0.08)] min-w-0 max-w-full overflow-hidden"
               variants={cardVariants}
             >
               {/* Top Index Corner */}

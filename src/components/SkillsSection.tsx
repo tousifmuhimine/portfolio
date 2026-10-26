@@ -51,7 +51,7 @@ function SpotlightCard({ skill, index }: { skill: Skill; index: number }) {
       ref={cardRef}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
-      className="relative flex flex-col justify-between overflow-hidden border border-white/10 bg-[#07080a] p-6 backdrop-blur-xl transition-all duration-300 hover:border-white/20"
+      className="relative flex flex-col justify-between overflow-hidden border border-white/10 bg-[#07080a] p-5 sm:p-6 backdrop-blur-xl transition-all duration-300 hover:border-white/20 min-w-0 max-w-full"
       data-cursor="code"
     >
       {/* Spotlight Cursor Glow on Card Border */}

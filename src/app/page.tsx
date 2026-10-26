@@ -201,7 +201,7 @@ const experience = [
   {
     company: 'Cognisor AI',
     role: 'AI Engineer Intern',
-    time: 'July 2026 – Present',
+    time: 'June 2026 – Present',
     place: 'Dhaka',
     bullets: [
       'Engineering and evaluating AI workflows, LLM agents, and retrieval-augmented generation (RAG) systems.',

@@ -18,6 +18,7 @@ const storyChapters = [
   {
     id: '01',
     category: 'REASONING & LLMS',
+    shortCategory: 'LLMs',
     title: 'I DO // Fine-Tuning & Multi-Step Reasoning',
     tagline: 'Moving beyond naive prompting to verifiable model intelligence.',
     icon: BrainCircuit,
@@ -29,15 +30,22 @@ const storyChapters = [
       'Custom dataset curation and iterative loss optimization yielding 15% verifiable reasoning gain.',
     ],
     codeSnippet: `def fine_tune_reasoning_node():
-    model = AutoModelForCausalLM.from_pretrained("google/gemma-3-4b")
-    lora_config = LoraConfig(r=16, lora_alpha=32, target_modules=["q_proj", "v_proj"])
-    trainer = SFTTrainer(model=model, train_dataset=gsm8k_curated, eval_dataset=benchmark_eval)
+    model = AutoModelForCausalLM.from_pretrained(
+        "google/gemma-3-4b"
+    )
+    lora_config = LoraConfig(
+        r=16, lora_alpha=32, target_modules=["q_proj", "v_proj"]
+    )
+    trainer = SFTTrainer(
+        model=model, train_dataset=gsm8k_curated, eval_dataset=benchmark_eval
+    )
     # Output: +15% Reasoning Accuracy on GSM8K`,
     projectRef: 'PorteHobe AI Capstone',
   },
   {
     id: '02',
     category: 'AGENTS & RETRIEVAL',
+    shortCategory: 'Agents',
     title: 'I DO // Autonomous Agents & Grounded RAG',
     tagline: 'Giving models deterministic memory, external tools, and validation loops.',
     icon: Bot,
@@ -52,12 +60,15 @@ const storyChapters = [
 workflow.add_node("retrieve_vector_context", pgvector_query)
 workflow.add_node("reason_with_mcp_tools", mcp_executor)
 workflow.add_edge("retrieve_vector_context", "reason_with_mcp_tools")
-workflow.add_conditional_edges("reason_with_mcp_tools", should_continue)`,
+workflow.add_conditional_edges(
+    "reason_with_mcp_tools", should_continue
+)`,
     projectRef: 'DSA Learning LLM & Physics RAG',
   },
   {
     id: '03',
     category: 'FULL-STACK SYSTEMS',
+    shortCategory: 'Full-Stack',
     title: 'I DO // Resilient Backend & Full-Stack Apps',
     tagline: 'Transforming AI logic into production-grade, secure, fast applications.',
     icon: Server,
@@ -77,6 +88,7 @@ async def stream_reasoning(request: PromptRequest, user: User = Depends(auth_gua
   {
     id: '04',
     category: 'PREDICTIVE ML',
+    shortCategory: 'ML / DL',
     title: 'I DO // Predictive Modeling & Multimodal DL',
     tagline: 'Engineering stability out of raw environmental and temporal tensors.',
     icon: Activity,
@@ -150,14 +162,14 @@ export default function ScrollStorySection() {
               <button
                 key={chapter.id}
                 onClick={() => setActiveTab(idx)}
-                className={`flex items-center gap-2.5 border px-4 py-2 font-mono text-xs font-semibold transition-all duration-300 ${
+                className={`flex items-center gap-2 border px-3 sm:px-4 py-1.5 sm:py-2 font-mono text-xs font-semibold transition-all duration-300 ${
                   isActive
                     ? 'border-[#3df5ff] bg-[#3df5ff]/10 text-white shadow-[0_0_20px_rgba(61,245,255,0.15)]'
                     : 'border-white/10 bg-[#07080a] text-white/50 hover:border-white/30 hover:text-white'
                 }`}
               >
                 <span
-                  className="flex h-5 w-5 items-center justify-center font-bold"
+                  className="flex h-5 w-5 items-center justify-center font-bold text-[11px]"
                   style={{
                     backgroundColor: isActive ? chapter.color : 'rgba(255,255,255,0.08)',
                     color: isActive ? '#07080a' : '#888',
@@ -166,7 +178,7 @@ export default function ScrollStorySection() {
                   {chapter.id}
                 </span>
                 <span className="hidden sm:inline">{chapter.category}</span>
-                <span className="sm:hidden">{chapter.id}</span>
+                <span className="sm:hidden text-[10px] text-white/80">{chapter.shortCategory}</span>
               </button>
             );
           })}
@@ -184,79 +196,83 @@ export default function ScrollStorySection() {
                 initial={{ opacity: 0, y: 25 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, ease: 'easeOut' }}
-                className="grid gap-8 border border-white/10 bg-[#07080a]/90 p-6 md:p-10 backdrop-blur-xl lg:grid-cols-[1.15fr_0.85fr]"
+                className="grid gap-6 sm:gap-8 border border-white/10 bg-[#07080a]/90 p-4 sm:p-6 md:p-10 backdrop-blur-xl lg:grid-cols-[1.15fr_0.85fr] w-full min-w-0 max-w-full overflow-hidden"
               >
                 {/* Left Column: Narrative Details & Bullet Points */}
-                <div>
+                <div className="min-w-0 max-w-full overflow-hidden">
                   <div className="flex items-center gap-3">
                     <div
-                      className="flex h-10 w-10 items-center justify-center border border-white/10"
+                      className="flex h-9 w-9 sm:h-10 sm:w-10 shrink-0 items-center justify-center border border-white/10"
                       style={{ backgroundColor: `${chapter.color}15`, color: chapter.color }}
                     >
-                      <Icon size={20} />
+                      <Icon size={18} />
                     </div>
-                    <div>
+                    <div className="min-w-0">
                       <span className="font-mono text-xs font-bold tracking-wider" style={{ color: chapter.color }}>
                         // CHAPTER {chapter.id}: {chapter.category}
                       </span>
-                      <p className="font-mono text-[11px] text-white/50">{chapter.telemetry}</p>
+                      <p className="font-mono text-[10px] sm:text-[11px] text-white/50 break-words leading-tight mt-0.5">
+                        {chapter.telemetry}
+                      </p>
                     </div>
                   </div>
 
-                  <h3 className="mt-5 text-2xl font-bold text-white md:text-3xl">
+                  <h3 className="mt-4 sm:mt-5 text-xl sm:text-2xl md:text-3xl font-bold text-white tracking-tight break-words">
                     {chapter.title}
                   </h3>
-                  <p className="mt-2 text-base text-white/80 font-medium">
+                  <p className="mt-2 text-sm sm:text-base text-white/80 font-medium break-words">
                     {chapter.tagline}
                   </p>
 
                   {/* Bullet Highlights */}
-                  <div className="mt-6 space-y-3.5">
+                  <div className="mt-5 sm:mt-6 space-y-3">
                     {chapter.points.map((point, pIdx) => (
-                      <div key={pIdx} className="flex items-start gap-3">
-                        <CheckCircle2 size={18} className="mt-0.5 shrink-0" style={{ color: chapter.color }} />
-                        <span className="text-sm leading-relaxed text-[#8e929b]">{point}</span>
+                      <div key={pIdx} className="flex items-start gap-2.5 sm:gap-3">
+                        <CheckCircle2 size={16} className="mt-0.5 shrink-0" style={{ color: chapter.color }} />
+                        <span className="text-xs sm:text-sm leading-relaxed text-[#8e929b] break-words">{point}</span>
                       </div>
                     ))}
                   </div>
 
                   {/* Real Project Link Reference */}
-                  <div className="mt-8 flex flex-wrap items-center justify-between gap-4 border-t border-white/10 pt-6">
-                    <div>
-                      <span className="font-mono text-xs text-white/40">EVIDENCE IN PORTFOLIO:</span>
-                      <p className="font-mono text-sm font-semibold text-white">{chapter.projectRef}</p>
+                  <div className="mt-6 sm:mt-8 flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4 border-t border-white/10 pt-5 sm:pt-6">
+                    <div className="min-w-0">
+                      <span className="font-mono text-[11px] sm:text-xs text-white/40">EVIDENCE IN PORTFOLIO:</span>
+                      <p className="font-mono text-xs sm:text-sm font-semibold text-white truncate">{chapter.projectRef}</p>
                     </div>
                     <a
                       href="#projects"
-                      className="inline-flex items-center gap-1.5 font-mono text-xs font-bold text-[#3df5ff] hover:underline"
+                      className="inline-flex items-center gap-1.5 font-mono text-xs font-bold text-[#3df5ff] hover:underline shrink-0"
                     >
-                      JUMP TO PROJECT CARD
-                      <ArrowRight size={14} />
+                      <span>JUMP TO PROJECT CARD</span>
+                      <ArrowRight size={13} />
                     </a>
                   </div>
                 </div>
 
                 {/* Right Column: Code Terminal */}
-                <div className="flex flex-col justify-between border border-white/10 bg-[#0d1017] p-5 font-mono shadow-inner">
-                  <div>
-                    <div className="flex items-center justify-between border-b border-white/10 pb-3">
-                      <div className="flex items-center gap-2">
-                        <Terminal size={14} style={{ color: chapter.color }} />
-                        <span className="text-xs text-white/80 font-bold">
+                <div className="flex flex-col justify-between border border-white/10 bg-[#0d1017] p-3.5 sm:p-5 font-mono shadow-inner min-w-0 max-w-full overflow-hidden">
+                  <div className="min-w-0 max-w-full">
+                    <div className="flex flex-wrap items-center justify-between gap-2 border-b border-white/10 pb-2.5 sm:pb-3">
+                      <div className="flex items-center gap-2 min-w-0">
+                        <Terminal size={14} className="shrink-0" style={{ color: chapter.color }} />
+                        <span className="text-xs text-white/80 font-bold truncate">
                           kernel_{chapter.category.toLowerCase().replace(/[^a-z]/g, '_')}.py
                         </span>
                       </div>
-                      <span className="border border-white/10 bg-white/5 px-2 py-0.5 text-[10px] text-white/50">
-                        PYTHON 3.11 // PRODUCTION
+                      <span className="border border-white/10 bg-white/5 px-2 py-0.5 text-[9px] sm:text-[10px] text-white/50 shrink-0">
+                        PYTHON 3.11 // PROD
                       </span>
                     </div>
 
-                    <pre className="mt-4 overflow-x-auto text-xs leading-relaxed text-white/80">
-                      <code>{chapter.codeSnippet}</code>
-                    </pre>
+                    <div className="mt-3 sm:mt-4 overflow-x-auto max-w-full rounded bg-black/40 p-2 sm:p-3 scrollbar-thin">
+                      <pre className="text-[11px] sm:text-xs leading-relaxed text-white/85 whitespace-pre">
+                        <code>{chapter.codeSnippet}</code>
+                      </pre>
+                    </div>
                   </div>
 
-                  <div className="mt-6 border border-white/10 bg-[#07080a] p-3 text-[11px] text-white/50">
+                  <div className="mt-4 sm:mt-6 border border-white/10 bg-[#07080a] p-2.5 sm:p-3 text-[10px] sm:text-[11px] text-white/50 break-words">
                     <span className="font-bold text-white">Engineering Principle:</span> Every architectural
                     pattern shown here is reflected in my public GitHub repositories and verified projects below.
                   </div>
