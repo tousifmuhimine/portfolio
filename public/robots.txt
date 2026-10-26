@@ -1,2 +1,4 @@
 User-agent: *
 Allow: /
+
+Sitemap: https://tousifmuhimine.vercel.app/sitemap.xml

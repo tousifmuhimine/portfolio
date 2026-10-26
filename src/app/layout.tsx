@@ -25,6 +25,7 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'https://tousifmuhimine.vercel.app'),
   title: 'Abdullah Al Muhaimine (Tousif) | AI Full-Stack Portfolio',
   description:
     'Portfolio of Abdullah Al Muhaimine (Tousif): AI Developer & Full-Stack Engineer. Fine-tuning LLMs, multi-agent reasoning, vector retrieval, and production systems.',
