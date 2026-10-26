@@ -52,7 +52,7 @@ export default function SkillNodeGraph() {
     if (!ctx) return;
 
     let width = (canvas.width = canvas.parentElement?.clientWidth || 550);
-    let height = (canvas.height = 280);
+    let height = (canvas.height = width < 500 ? 220 : 280);
 
     const nodes = INITIAL_NODES.map((n) => ({
       ...n,
@@ -67,6 +67,7 @@ export default function SkillNodeGraph() {
       ctx.clearRect(0, 0, width, height);
 
       pulseProgress = (pulseProgress + 0.015) % 1;
+      const isSmall = width < 500;
 
       // Draw Edges
       EDGES.forEach((edge) => {
@@ -98,22 +99,22 @@ export default function SkillNodeGraph() {
         node.x += node.vx;
         node.y += node.vy;
 
-        if (node.x < 40 || node.x > width - 40) node.vx *= -1;
-        if (node.y < 30 || node.y > height - 30) node.vy *= -1;
+        if (node.x < 35 || node.x > width - 35) node.vx *= -1;
+        if (node.y < 25 || node.y > height - 25) node.vy *= -1;
 
         const isHovered = hoveredNode === node.id;
 
         // Outer glow on hover
         if (isHovered) {
           ctx.beginPath();
-          ctx.arc(node.x, node.y, 14, 0, Math.PI * 2);
+          ctx.arc(node.x, node.y, 12, 0, Math.PI * 2);
           ctx.fillStyle = 'rgba(61, 245, 255, 0.15)';
           ctx.fill();
         }
 
         // Inner circle
         ctx.beginPath();
-        ctx.arc(node.x, node.y, isHovered ? 6 : 4, 0, Math.PI * 2);
+        ctx.arc(node.x, node.y, isHovered ? 5 : 3.5, 0, Math.PI * 2);
         ctx.fillStyle =
           node.category === 'ai'
             ? '#3df5ff'
@@ -124,11 +125,30 @@ export default function SkillNodeGraph() {
             : '#fbbf24';
         ctx.fill();
 
-        // Label
-        ctx.font = '10px monospace';
-        ctx.fillStyle = isHovered ? '#ffffff' : 'rgba(255, 255, 255, 0.6)';
+        // Adaptive Label (shortened on small screens to prevent overlap)
+        ctx.font = isSmall ? '8px monospace' : '10px monospace';
+        ctx.fillStyle = isHovered ? '#ffffff' : 'rgba(255, 255, 255, 0.65)';
         ctx.textAlign = 'center';
-        ctx.fillText(node.label, node.x, node.y - 10);
+
+        const labelText = isSmall
+          ? node.id === 'langgraph'
+            ? 'LangGraph'
+            : node.id === 'pgvector'
+            ? 'PGVector'
+            : node.id === 'fastapi'
+            ? 'FastAPI'
+            : node.id === 'nextjs'
+            ? 'Next.js'
+            : node.id === 'pytorch'
+            ? 'PyTorch'
+            : node.id === 'gsm8k'
+            ? 'GSM8K'
+            : node.id === 'llm'
+            ? 'LLMs'
+            : 'Gemma'
+          : node.label;
+
+        ctx.fillText(labelText, node.x, node.y - (isSmall ? 7 : 10));
       });
 
       animId = requestAnimationFrame(render);
@@ -139,7 +159,7 @@ export default function SkillNodeGraph() {
     const handleResize = () => {
       if (!canvas || !canvas.parentElement) return;
       width = canvas.width = canvas.parentElement.clientWidth;
-      height = canvas.height = 280;
+      height = canvas.height = width < 500 ? 220 : 280;
     };
 
     window.addEventListener('resize', handleResize);
@@ -153,16 +173,16 @@ export default function SkillNodeGraph() {
   return (
     <div
       ref={containerRef}
-      className="relative overflow-hidden rounded-xl border border-white/10 bg-[#07080a]/80 p-4 backdrop-blur-md"
+      className="relative overflow-hidden rounded-xl sm:rounded-2xl border border-white/10 bg-[#07080a]/80 p-3 sm:p-4 backdrop-blur-md"
     >
-      <div className="flex items-center justify-between border-b border-white/10 pb-2 font-mono text-[11px] text-white/50">
+      <div className="flex items-center justify-between border-b border-white/10 pb-2 font-mono text-[10px] sm:text-[11px] text-white/50">
         <span className="flex items-center gap-1.5 text-[#3df5ff]">
           <span className="h-1.5 w-1.5 rounded-full bg-[#3df5ff]" />
-          INTERACTIVE NEURAL NODE GRAPH
+          INTERACTIVE NEURAL GRAPH
         </span>
-        <span>LATENT EMBEDDINGS LINKED</span>
+        <span className="hidden sm:inline">LATENT EMBEDDINGS LINKED</span>
       </div>
-      <canvas ref={canvasRef} className="mt-2 w-full" />
+      <canvas ref={canvasRef} className="mt-2 w-full touch-none" />
     </div>
   );
 }

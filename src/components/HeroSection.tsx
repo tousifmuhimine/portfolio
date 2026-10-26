@@ -76,28 +76,28 @@ export default function HeroSection({ stats }: HeroProps) {
         </motion.div>
 
         {/* Giant Main Heading Exactly Matching Reference Image */}
-        <div className="mt-8 select-none">
+        <div className="mt-6 sm:mt-8 select-none">
           {/* Row 1: ABDULLAH AL MUHAIMINE (TOUSIF) */}
-          <div className="flex flex-wrap items-baseline gap-x-4">
-            <h1 className="text-[11vw] font-black leading-[0.88] tracking-tighter text-[#ecebe6] uppercase sm:text-[10vw] lg:text-[8.5vw]">
+          <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
+            <h1 className="text-4xl sm:text-6xl md:text-7xl lg:text-[8.5vw] font-black leading-[0.95] tracking-tighter text-[#ecebe6] uppercase">
               <TextScramble
                 text="Abdullah Al Muhaimine"
                 delay={150}
                 speed={22}
               />
             </h1>
-            <span className="font-mono text-2xl font-bold tracking-tight text-[#3df5ff]/70 sm:text-4xl lg:text-5xl">
+            <span className="font-mono text-xl sm:text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight text-[#3df5ff]/70">
               (TOUSIF)
             </span>
           </div>
 
           {/* Row 2: AI ENGINEER. with Neon Cyan Glow Box & Backdrop */}
-          <div className="relative mt-3 inline-block">
-            <div className="relative inline-block border border-[#3df5ff]/80 bg-[#3df5ff]/10 px-4 py-1 backdrop-blur-sm shadow-[0_0_50px_rgba(61,245,255,0.35)]">
+          <div className="relative mt-2 sm:mt-3 inline-block max-w-full">
+            <div className="relative inline-block border border-[#3df5ff]/80 bg-[#3df5ff]/10 px-3 py-1 sm:px-4 sm:py-1.5 backdrop-blur-sm shadow-[0_0_40px_rgba(61,245,255,0.3)] max-w-full">
               {/* Backlight Cyan Glow Aura */}
-              <div className="pointer-events-none absolute inset-0 -z-10 bg-[#3df5ff] blur-2xl opacity-25" />
+              <div className="pointer-events-none absolute inset-0 -z-10 bg-[#3df5ff] blur-xl opacity-20" />
 
-              <span className="text-[11vw] font-black leading-[0.88] tracking-tighter text-[#3df5ff] uppercase sm:text-[10vw] lg:text-[8.5vw]">
+              <span className="text-3xl sm:text-5xl md:text-7xl lg:text-[8.5vw] font-black leading-[0.95] tracking-tighter text-[#3df5ff] uppercase block">
                 AI ENGINEER.
               </span>
             </div>
@@ -105,49 +105,49 @@ export default function HeroSection({ stats }: HeroProps) {
         </div>
 
         {/* Bottom Split Narrative Row Matching Reference Image */}
-        <div className="mt-12 grid items-end gap-8 pb-16 md:grid-cols-[1.2fr_0.8fr]">
+        <div className="mt-8 sm:mt-12 grid items-end gap-6 sm:gap-8 pb-12 sm:pb-16 md:grid-cols-[1.2fr_0.8fr]">
           {/* Left Subtext: Role & Dynamic Terminal Typing */}
           <div>
-            <div className="font-mono text-base font-bold text-white md:text-xl">
+            <div className="font-mono text-sm sm:text-base md:text-xl font-bold text-white">
               <span className="text-[#3df5ff] mr-2">›</span>
               <span>AI Engineer & Full-Stack Developer</span>
             </div>
 
             {/* Rotating typewriter capability */}
-            <div className="mt-3 min-h-[46px] border-l-2 border-[#3df5ff] bg-white/[0.02] p-3 font-mono text-xs text-white/80 md:text-sm">
+            <div className="mt-3 min-h-[46px] border-l-2 border-[#3df5ff] bg-white/[0.02] p-2.5 sm:p-3 font-mono text-xs text-white/80 md:text-sm">
               <span className="text-[#c8ff3d] mr-2 font-bold">»</span>
               <span>{subText}</span>
               <span className="typing-cursor" />
             </div>
 
             {/* Core Action Buttons */}
-            <div className="mt-6 flex flex-wrap items-center gap-3">
-              <MagneticButton as="a" href="#projects" className="btn btn-primary" strength={0.25}>
+            <div className="mt-5 sm:mt-6 flex flex-wrap items-center gap-2.5 sm:gap-3">
+              <MagneticButton as="a" href="#projects" className="btn btn-primary text-xs sm:text-sm py-2.5 px-4 sm:py-3 sm:px-5" strength={0.25}>
                 <span>EXPLORE WORK</span>
-                <ArrowUpRight size={16} />
+                <ArrowUpRight size={15} />
               </MagneticButton>
-              <MagneticButton as="a" href="#resumes" className="btn btn-secondary" strength={0.25}>
+              <MagneticButton as="a" href="#resumes" className="btn btn-secondary text-xs sm:text-sm py-2.5 px-4 sm:py-3 sm:px-5" strength={0.25}>
                 <span>RESUMES</span>
-                <Download size={16} />
+                <Download size={15} />
               </MagneticButton>
-              <MagneticButton as="a" href="#contact" className="btn btn-secondary border-[#3df5ff]/40 text-[#3df5ff]" strength={0.25}>
+              <MagneticButton as="a" href="#contact" className="btn btn-secondary border-[#3df5ff]/40 text-[#3df5ff] text-xs sm:text-sm py-2.5 px-4 sm:py-3 sm:px-5" strength={0.25}>
                 <span>CONTACT</span>
               </MagneticButton>
             </div>
           </div>
 
-          {/* Right Subtext Matching Screenshot: "Designing models, systems and interfaces that think. Scroll to explore ↓" */}
+          {/* Right Subtext Matching Screenshot */}
           <div className="flex flex-col items-start md:items-end text-left md:text-right">
             <p className="max-w-md font-mono text-xs leading-relaxed text-white/50 sm:text-sm">
               Designing models, systems and interfaces that think. Scroll to explore ↓
             </p>
 
             {/* Metrics Counter Pill */}
-            <div className="mt-6 flex flex-wrap gap-4 border border-white/10 bg-[#07080a]/80 p-3 font-mono text-xs backdrop-blur-md">
+            <div className="mt-4 sm:mt-6 grid grid-cols-2 gap-2 sm:flex sm:flex-wrap sm:gap-4 border border-white/10 bg-[#07080a]/80 p-3 font-mono text-xs backdrop-blur-md w-full sm:w-auto">
               {stats.map(([val, label]) => (
-                <div key={label} className="text-left">
-                  <span className="font-bold text-[#3df5ff]">{val}</span>{' '}
-                  <span className="text-white/40">{label.split(' ')[0]}</span>
+                <div key={label} className="text-left p-1">
+                  <span className="font-bold text-[#3df5ff] text-sm sm:text-xs">{val}</span>{' '}
+                  <span className="text-white/40 text-[11px]">{label.split(' ')[0]}</span>
                 </div>
               ))}
             </div>
@@ -155,64 +155,66 @@ export default function HeroSection({ stats }: HeroProps) {
         </div>
       </div>
 
-      {/* Tilted Neon Cyan Ribbon Banner Across Bottom - Exact match to user screenshot! */}
-      <div className="relative w-full overflow-hidden border-y border-[#3df5ff] bg-[#3df5ff] py-3.5 select-none shadow-[0_0_35px_rgba(61,245,255,0.4)] rotate-[-1deg] translate-y-3 z-20">
-        <div className="flex overflow-hidden whitespace-nowrap">
-          <div className="animate-marquee flex shrink-0 items-center gap-8 font-black font-sans text-black text-xl sm:text-2xl tracking-tighter uppercase">
-            <span>TS</span>
-            <span className="text-black text-sm">✦</span>
-            <span>NODE</span>
-            <span className="text-black text-sm">✦</span>
-            <span>POSTGRES</span>
-            <span className="text-black text-sm">✦</span>
-            <span>DOCKER</span>
-            <span className="text-black text-sm">✦</span>
-            <span>GEMMA 3:4B</span>
-            <span className="text-black text-sm">✦</span>
-            <span>LANGGRAPH</span>
-            <span className="text-black text-sm">✦</span>
-            <span>FASTAPI</span>
-            <span className="text-black text-sm">✦</span>
-            <span>SUPABASE</span>
-            <span className="text-black text-sm">✦</span>
-            <span>PGVECTOR</span>
-            <span className="text-black text-sm">✦</span>
-            <span>NEXT.JS</span>
-            <span className="text-black text-sm">✦</span>
-            <span>PYTORCH</span>
-            <span className="text-black text-sm">✦</span>
-            <span>PYTHON</span>
-            <span className="text-black text-sm">✦</span>
-            <span>GSM8K</span>
-            <span className="text-black text-sm">✦</span>
-          </div>
-          <div className="animate-marquee flex shrink-0 items-center gap-8 font-black font-sans text-black text-xl sm:text-2xl tracking-tighter uppercase" aria-hidden="true">
-            <span>TS</span>
-            <span className="text-black text-sm">✦</span>
-            <span>NODE</span>
-            <span className="text-black text-sm">✦</span>
-            <span>POSTGRES</span>
-            <span className="text-black text-sm">✦</span>
-            <span>DOCKER</span>
-            <span className="text-black text-sm">✦</span>
-            <span>GEMMA 3:4B</span>
-            <span className="text-black text-sm">✦</span>
-            <span>LANGGRAPH</span>
-            <span className="text-black text-sm">✦</span>
-            <span>FASTAPI</span>
-            <span className="text-black text-sm">✦</span>
-            <span>SUPABASE</span>
-            <span className="text-black text-sm">✦</span>
-            <span>PGVECTOR</span>
-            <span className="text-black text-sm">✦</span>
-            <span>NEXT.JS</span>
-            <span className="text-black text-sm">✦</span>
-            <span>PYTORCH</span>
-            <span className="text-black text-sm">✦</span>
-            <span>PYTHON</span>
-            <span className="text-black text-sm">✦</span>
-            <span>GSM8K</span>
-            <span className="text-black text-sm">✦</span>
+      {/* Tilted Neon Cyan Ribbon Banner Across Bottom - Safe for mobile */}
+      <div className="relative w-full overflow-hidden py-1">
+        <div className="w-[104%] -ml-[2%] overflow-hidden border-y border-[#3df5ff] bg-[#3df5ff] py-2.5 sm:py-3.5 select-none shadow-[0_0_35px_rgba(61,245,255,0.4)] rotate-[-1deg]">
+          <div className="flex overflow-hidden whitespace-nowrap">
+            <div className="animate-marquee flex shrink-0 items-center gap-6 sm:gap-8 font-black font-sans text-black text-lg sm:text-2xl tracking-tighter uppercase">
+              <span>TS</span>
+              <span className="text-black text-xs sm:text-sm">✦</span>
+              <span>NODE</span>
+              <span className="text-black text-xs sm:text-sm">✦</span>
+              <span>POSTGRES</span>
+              <span className="text-black text-xs sm:text-sm">✦</span>
+              <span>DOCKER</span>
+              <span className="text-black text-xs sm:text-sm">✦</span>
+              <span>GEMMA 3:4B</span>
+              <span className="text-black text-xs sm:text-sm">✦</span>
+              <span>LANGGRAPH</span>
+              <span className="text-black text-xs sm:text-sm">✦</span>
+              <span>FASTAPI</span>
+              <span className="text-black text-xs sm:text-sm">✦</span>
+              <span>SUPABASE</span>
+              <span className="text-black text-xs sm:text-sm">✦</span>
+              <span>PGVECTOR</span>
+              <span className="text-black text-xs sm:text-sm">✦</span>
+              <span>NEXT.JS</span>
+              <span className="text-black text-xs sm:text-sm">✦</span>
+              <span>PYTORCH</span>
+              <span className="text-black text-xs sm:text-sm">✦</span>
+              <span>PYTHON</span>
+              <span className="text-black text-xs sm:text-sm">✦</span>
+              <span>GSM8K</span>
+              <span className="text-black text-xs sm:text-sm">✦</span>
+            </div>
+            <div className="animate-marquee flex shrink-0 items-center gap-6 sm:gap-8 font-black font-sans text-black text-lg sm:text-2xl tracking-tighter uppercase" aria-hidden="true">
+              <span>TS</span>
+              <span className="text-black text-xs sm:text-sm">✦</span>
+              <span>NODE</span>
+              <span className="text-black text-xs sm:text-sm">✦</span>
+              <span>POSTGRES</span>
+              <span className="text-black text-xs sm:text-sm">✦</span>
+              <span>DOCKER</span>
+              <span className="text-black text-xs sm:text-sm">✦</span>
+              <span>GEMMA 3:4B</span>
+              <span className="text-black text-xs sm:text-sm">✦</span>
+              <span>LANGGRAPH</span>
+              <span className="text-black text-xs sm:text-sm">✦</span>
+              <span>FASTAPI</span>
+              <span className="text-black text-xs sm:text-sm">✦</span>
+              <span>SUPABASE</span>
+              <span className="text-black text-xs sm:text-sm">✦</span>
+              <span>PGVECTOR</span>
+              <span className="text-black text-xs sm:text-sm">✦</span>
+              <span>NEXT.JS</span>
+              <span className="text-black text-xs sm:text-sm">✦</span>
+              <span>PYTORCH</span>
+              <span className="text-black text-xs sm:text-sm">✦</span>
+              <span>PYTHON</span>
+              <span className="text-black text-xs sm:text-sm">✦</span>
+              <span>GSM8K</span>
+              <span className="text-black text-xs sm:text-sm">✦</span>
+            </div>
           </div>
         </div>
       </div>

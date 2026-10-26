@@ -22,12 +22,27 @@ interface ProjectsWheelProps {
 export default function ProjectsWheel({ projects, onInspect }: ProjectsWheelProps) {
   const [activeIndex, setActiveIndex] = useState(0);
   const [isDragging, setIsDragging] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+  const [windowWidth, setWindowWidth] = useState(1024);
+
   const dragStartX = useRef(0);
   const dragDeltaX = useRef(0);
   const wheelLockRef = useRef(false);
   const containerRef = useRef<HTMLDivElement>(null);
 
   const total = projects.length;
+
+  useEffect(() => {
+    const handleResize = () => {
+      const w = window.innerWidth;
+      setWindowWidth(w);
+      setIsMobile(w < 768);
+    };
+
+    handleResize();
+    window.addEventListener('resize', handleResize, { passive: true });
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   const nextProject = useCallback(() => {
     setActiveIndex((prev) => (prev + 1) % total);
@@ -88,14 +103,14 @@ export default function ProjectsWheel({ projects, onInspect }: ProjectsWheelProp
   const handleMouseUp = () => {
     if (!isDragging) return;
     setIsDragging(false);
-    if (dragDeltaX.current < -45) {
+    if (dragDeltaX.current < -35) {
       nextProject();
-    } else if (dragDeltaX.current > 45) {
+    } else if (dragDeltaX.current > 35) {
       prevProject();
     }
   };
 
-  // Touch Drag handlers
+  // Touch Drag handlers with mobile pan-y support
   const handleTouchStart = (e: TouchEvent) => {
     dragStartX.current = e.touches[0].clientX;
     dragDeltaX.current = 0;
@@ -106,9 +121,9 @@ export default function ProjectsWheel({ projects, onInspect }: ProjectsWheelProp
   };
 
   const handleTouchEnd = () => {
-    if (dragDeltaX.current < -35) {
+    if (dragDeltaX.current < -28) {
       nextProject();
-    } else if (dragDeltaX.current > 35) {
+    } else if (dragDeltaX.current > 28) {
       prevProject();
     }
   };
@@ -124,7 +139,7 @@ export default function ProjectsWheel({ projects, onInspect }: ProjectsWheelProp
   return (
     <div
       ref={containerRef}
-      className="relative select-none py-12"
+      className="relative select-none py-6 sm:py-12 touch-pan-y overflow-hidden"
       onMouseDown={handleMouseDown}
       onMouseMove={handleMouseMove}
       onMouseUp={handleMouseUp}
@@ -134,27 +149,30 @@ export default function ProjectsWheel({ projects, onInspect }: ProjectsWheelProp
     >
       {/* 3D Circular Wheel Stage */}
       <div
-        className="relative mx-auto flex h-[620px] w-full max-w-6xl items-center justify-center overflow-visible"
-        style={{ perspective: '1500px', transformStyle: 'preserve-3d' }}
+        className="relative mx-auto flex h-[480px] sm:h-[540px] md:h-[620px] w-full max-w-6xl items-center justify-center overflow-visible"
+        style={{ perspective: isMobile ? '1100px' : '1500px', transformStyle: 'preserve-3d' }}
       >
         {projects.map((project, idx) => {
           const offset = getOffset(idx);
           const isCenter = offset === 0;
-          const isVisible = Math.abs(offset) <= 2;
+
+          // On mobile, only render offset -1, 0, 1 for ultra smooth mobile performance & clean bounds
+          const maxVisibleOffset = isMobile ? 1 : 2;
+          const isVisible = Math.abs(offset) <= maxVisibleOffset;
 
           if (!isVisible) return null;
 
-          // True 3D Circular Arc Math (positions cards along an authentic cylinder circumference)
-          const radius = 640; // 3D arc radius
-          const angleStep = 32; // degrees per card
+          // Responsive 3D Circular Arc Math
+          const radius = isMobile ? Math.min(310, windowWidth * 0.72) : 640;
+          const angleStep = isMobile ? 24 : 32;
           const angleRad = (offset * angleStep * Math.PI) / 180;
 
           const translateX = Math.sin(angleRad) * radius;
           const translateZ = (Math.cos(angleRad) - 1) * radius;
-          const rotateY = -offset * angleStep;
+          const rotateY = -offset * (isMobile ? 20 : angleStep);
 
-          const scale = isCenter ? 1 : Math.max(0.74, 1 - Math.abs(offset) * 0.14);
-          const opacity = isCenter ? 1 : Math.max(0.18, 0.55 - Math.abs(offset) * 0.2);
+          const scale = isCenter ? 1 : isMobile ? 0.84 : Math.max(0.74, 1 - Math.abs(offset) * 0.14);
+          const opacity = isCenter ? 1 : isMobile ? 0.32 : Math.max(0.18, 0.55 - Math.abs(offset) * 0.2);
           const zIndex = 30 - Math.abs(offset) * 10;
 
           const formattedIndex = `0${idx + 1}`.slice(-2);
@@ -171,46 +189,46 @@ export default function ProjectsWheel({ projects, onInspect }: ProjectsWheelProp
               }}
               style={{
                 position: 'absolute',
-                width: 'min(460px, 88vw)',
+                width: isMobile ? 'min(330px, 86vw)' : 'min(460px, 88vw)',
                 transform: `translateX(${translateX}px) translateZ(${translateZ}px) rotateY(${rotateY}deg) scale(${scale})`,
                 opacity,
                 zIndex,
-                transition: 'all 0.68s cubic-bezier(0.16, 1, 0.3, 1)',
+                transition: 'all 0.65s cubic-bezier(0.16, 1, 0.3, 1)',
                 cursor: 'pointer',
               }}
               className="group"
             >
               {/* Rounded, Glassmorphic 3D Card Shell */}
               <div
-                className={`relative flex flex-col overflow-hidden rounded-[28px] border bg-[#07080a]/92 p-6 backdrop-blur-2xl transition-all duration-300 ${
+                className={`relative flex flex-col overflow-hidden rounded-2xl sm:rounded-[28px] border bg-[#07080a]/95 p-4 sm:p-6 backdrop-blur-2xl transition-all duration-300 ${
                   isCenter
-                    ? 'border-[#3df5ff]/60 shadow-[0_24px_80px_rgba(61,245,255,0.22)]'
-                    : 'border-white/10 hover:border-white/25 shadow-2xl'
+                    ? 'border-[#3df5ff]/60 shadow-[0_16px_60px_rgba(61,245,255,0.22)]'
+                    : 'border-white/10 hover:border-white/25 shadow-xl'
                 }`}
               >
                 {/* Glowing Top Edge Flare for Focused Card */}
                 {isCenter && (
-                  <div className="pointer-events-none absolute inset-x-8 top-0 h-[2px] bg-gradient-to-r from-transparent via-[#3df5ff] to-transparent shadow-[0_0_15px_#3df5ff]" />
+                  <div className="pointer-events-none absolute inset-x-6 sm:inset-x-8 top-0 h-[2px] bg-gradient-to-r from-transparent via-[#3df5ff] to-transparent shadow-[0_0_15px_#3df5ff]" />
                 )}
 
                 {/* Card Top Pill Bar: [01] / CATEGORY / 2026 */}
-                <div className="mb-4 flex items-center justify-between border-b border-white/10 pb-3 font-mono text-xs">
-                  <div className="flex items-center gap-2">
+                <div className="mb-3 sm:mb-4 flex items-center justify-between border-b border-white/10 pb-2.5 sm:pb-3 font-mono text-xs">
+                  <div className="flex items-center gap-1.5 sm:gap-2">
                     <span className={`font-bold ${isCenter ? 'text-[#3df5ff]' : 'text-white/40'}`}>
                       [{formattedIndex}]
                     </span>
                     <span className="text-white/40">/</span>
-                    <span className="text-white/70 uppercase tracking-wider line-clamp-1">
+                    <span className="text-white/70 uppercase tracking-wider line-clamp-1 text-[11px] sm:text-xs">
                       {project.category}
                     </span>
                   </div>
-                  <span className="rounded-full border border-white/10 bg-white/5 px-2.5 py-0.5 text-[10px] text-white/50">
-                    2026_SYS
+                  <span className="rounded-full border border-white/10 bg-white/5 px-2 py-0.5 text-[9px] sm:text-[10px] text-white/50">
+                    2026
                   </span>
                 </div>
 
                 {/* Smooth Rounded Screenshot Viewport */}
-                <div className="relative aspect-[16/10] overflow-hidden rounded-2xl border border-white/10 bg-[#0d1017]">
+                <div className="relative aspect-[16/10] overflow-hidden rounded-xl sm:rounded-2xl border border-white/10 bg-[#0d1017]">
                   <Image
                     src={project.imageUrl}
                     alt={project.title}
@@ -226,40 +244,40 @@ export default function ProjectsWheel({ projects, onInspect }: ProjectsWheelProp
 
                   {/* Rounded Metrics Pill */}
                   {project.metrics && (
-                    <div className="absolute bottom-3 left-3 flex items-center gap-1.5 rounded-full border border-[#3df5ff]/40 bg-[#07080a]/90 px-3 py-1 font-mono text-[11px] font-semibold text-[#3df5ff] backdrop-blur-md">
-                      <Sparkles size={11} />
-                      <span>{project.metrics}</span>
+                    <div className="absolute bottom-2.5 left-2.5 sm:bottom-3 sm:left-3 flex items-center gap-1.5 rounded-full border border-[#3df5ff]/40 bg-[#07080a]/90 px-2.5 py-0.5 sm:px-3 sm:py-1 font-mono text-[10px] sm:text-[11px] font-semibold text-[#3df5ff] backdrop-blur-md">
+                      <Sparkles size={10} />
+                      <span className="line-clamp-1">{project.metrics}</span>
                     </div>
                   )}
 
                   {/* Rounded Inspect Icon on Focused Card */}
                   {isCenter && (
-                    <div className="absolute right-3 top-3 flex h-8 w-8 items-center justify-center rounded-full border border-[#3df5ff] bg-[#07080a]/90 text-[#3df5ff] shadow-lg">
-                      <Eye size={14} />
+                    <div className="absolute right-2.5 top-2.5 sm:right-3 sm:top-3 flex h-7 w-7 sm:h-8 sm:w-8 items-center justify-center rounded-full border border-[#3df5ff] bg-[#07080a]/90 text-[#3df5ff] shadow-lg">
+                      <Eye size={13} />
                     </div>
                   )}
                 </div>
 
                 {/* Card Typography & Highlights */}
-                <div className="mt-5 flex flex-1 flex-col">
+                <div className="mt-3.5 sm:mt-5 flex flex-1 flex-col">
                   <h3
-                    className={`text-xl font-bold tracking-tight transition-colors ${
+                    className={`text-base sm:text-xl font-bold tracking-tight transition-colors line-clamp-1 ${
                       isCenter ? 'text-white' : 'text-white/60'
                     }`}
                   >
                     {project.title}
                   </h3>
 
-                  <p className="mt-2 text-xs leading-relaxed text-[#8e929b] line-clamp-2 md:text-sm">
+                  <p className="mt-1.5 sm:mt-2 text-xs leading-relaxed text-[#8e929b] line-clamp-2">
                     {project.description}
                   </p>
 
                   {/* Rounded Tech Stack Chips */}
-                  <div className="mt-4 flex flex-wrap gap-1.5">
-                    {project.techStack.split(',').map((tech, i) => (
+                  <div className="mt-3 sm:mt-4 flex flex-wrap gap-1 sm:gap-1.5">
+                    {project.techStack.split(',').slice(0, isMobile ? 4 : 6).map((tech, i) => (
                       <span
                         key={i}
-                        className={`rounded-full border px-2.5 py-0.5 font-mono text-[10px] transition-colors ${
+                        className={`rounded-full border px-2 sm:px-2.5 py-0.5 font-mono text-[9px] sm:text-[10px] transition-colors ${
                           isCenter
                             ? 'border-[#3df5ff]/30 bg-[#3df5ff]/10 text-[#3df5ff]'
                             : 'border-white/5 bg-white/[0.02] text-white/40'
@@ -271,22 +289,22 @@ export default function ProjectsWheel({ projects, onInspect }: ProjectsWheelProp
                   </div>
 
                   {/* Bottom Rounded Action Bar */}
-                  <div className="mt-5 flex items-center justify-between border-t border-white/10 pt-4 font-mono text-xs">
-                    <span className="flex items-center gap-1.5 font-semibold text-[#3df5ff]">
-                      <Layers size={13} />
-                      <span>INSPECT ARCHITECTURE</span>
+                  <div className="mt-3.5 sm:mt-5 flex items-center justify-between border-t border-white/10 pt-3 sm:pt-4 font-mono text-xs">
+                    <span className="flex items-center gap-1.5 font-semibold text-[#3df5ff] text-[11px] sm:text-xs">
+                      <Layers size={12} />
+                      <span>INSPECT DETAILS</span>
                     </span>
 
-                    <div className="flex items-center gap-2" onClick={(e) => e.stopPropagation()}>
+                    <div className="flex items-center gap-1.5" onClick={(e) => e.stopPropagation()}>
                       {project.githubUrl && (
                         <a
                           href={project.githubUrl}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="flex h-8 w-8 items-center justify-center rounded-lg border border-white/10 bg-white/5 text-white/60 hover:border-[#3df5ff] hover:text-[#3df5ff] transition-all"
+                          className="flex h-7 w-7 sm:h-8 sm:w-8 items-center justify-center rounded-lg border border-white/10 bg-white/5 text-white/60 hover:border-[#3df5ff] hover:text-[#3df5ff] transition-all"
                           title="Source Code"
                         >
-                          <Github size={14} />
+                          <Github size={13} />
                         </a>
                       )}
                       {project.liveUrl && (
@@ -294,11 +312,11 @@ export default function ProjectsWheel({ projects, onInspect }: ProjectsWheelProp
                           href={project.liveUrl}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="flex items-center gap-1 rounded-lg border border-[#3df5ff] bg-[#3df5ff]/10 px-3 py-1 font-bold text-[#3df5ff] hover:bg-[#3df5ff] hover:text-black transition-all"
+                          className="flex items-center gap-1 rounded-lg border border-[#3df5ff] bg-[#3df5ff]/10 px-2.5 sm:px-3 py-1 font-bold text-[#3df5ff] hover:bg-[#3df5ff] hover:text-black text-[11px] sm:text-xs transition-all"
                           title="Live Demo"
                         >
                           <span>DEMO</span>
-                          <ExternalLink size={12} />
+                          <ExternalLink size={11} />
                         </a>
                       )}
                     </div>
@@ -311,20 +329,21 @@ export default function ProjectsWheel({ projects, onInspect }: ProjectsWheelProp
       </div>
 
       {/* Rounded Floating Navigation Controls & Dial */}
-      <div className="mt-8 flex flex-col items-center justify-center gap-4">
+      <div className="mt-4 sm:mt-8 flex flex-col items-center justify-center gap-3 sm:gap-4">
         {/* Floating Rounded Nav Pill */}
-        <div className="flex items-center gap-5 rounded-full border border-white/15 bg-[#07080a]/90 px-5 py-2 font-mono text-xs shadow-2xl backdrop-blur-xl">
+        <div className="flex items-center gap-3 sm:gap-5 rounded-full border border-white/15 bg-[#07080a]/90 px-4 sm:px-5 py-1.5 sm:py-2 font-mono text-xs shadow-2xl backdrop-blur-xl">
           <button
             type="button"
             onClick={prevProject}
-            className="flex items-center gap-1.5 rounded-full px-3 py-1 text-white/70 hover:bg-white/10 hover:text-[#3df5ff] transition-all"
+            className="flex items-center gap-1 rounded-full px-2.5 sm:px-3 py-1 text-white/70 hover:bg-white/10 hover:text-[#3df5ff] transition-all"
+            aria-label="Previous Project"
           >
-            <ChevronLeft size={16} />
-            <span>PREV</span>
+            <ChevronLeft size={15} />
+            <span className="text-[11px] sm:text-xs">PREV</span>
           </button>
 
           {/* Segmented Dial Gauge */}
-          <div className="flex items-center gap-1.5 rounded-full border border-[#3df5ff]/40 bg-[#3df5ff]/10 px-3.5 py-1 text-xs font-bold text-[#3df5ff]">
+          <div className="flex items-center gap-1.5 rounded-full border border-[#3df5ff]/40 bg-[#3df5ff]/10 px-3 py-0.5 sm:px-3.5 sm:py-1 text-xs font-bold text-[#3df5ff]">
             <span>0{activeIndex + 1}</span>
             <span className="text-white/30">/</span>
             <span className="text-white/40">0{total}</span>
@@ -333,15 +352,16 @@ export default function ProjectsWheel({ projects, onInspect }: ProjectsWheelProp
           <button
             type="button"
             onClick={nextProject}
-            className="flex items-center gap-1.5 rounded-full px-3 py-1 text-white/70 hover:bg-white/10 hover:text-[#3df5ff] transition-all"
+            className="flex items-center gap-1 rounded-full px-2.5 sm:px-3 py-1 text-white/70 hover:bg-white/10 hover:text-[#3df5ff] transition-all"
+            aria-label="Next Project"
           >
-            <span>NEXT</span>
-            <ChevronRight size={16} />
+            <span className="text-[11px] sm:text-xs">NEXT</span>
+            <ChevronRight size={15} />
           </button>
         </div>
 
         {/* Rounded Progress Pills */}
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-1.5 sm:gap-2">
           {projects.map((p, idx) => {
             const isActive = idx === activeIndex;
             return (
@@ -350,19 +370,20 @@ export default function ProjectsWheel({ projects, onInspect }: ProjectsWheelProp
                 onClick={() => setActiveIndex(idx)}
                 className={`rounded-full transition-all duration-300 ${
                   isActive
-                    ? 'h-2 w-7 bg-[#3df5ff] shadow-[0_0_12px_rgba(61,245,255,0.8)]'
-                    : 'h-2 w-2 bg-white/20 hover:bg-white/40'
+                    ? 'h-1.5 sm:h-2 w-6 sm:w-7 bg-[#3df5ff] shadow-[0_0_12px_rgba(61,245,255,0.8)]'
+                    : 'h-1.5 sm:h-2 w-1.5 sm:w-2 bg-white/20 hover:bg-white/40'
                 }`}
                 title={`Jump to ${p.title}`}
+                aria-label={`Jump to project ${idx + 1}`}
               />
             );
           })}
         </div>
 
         {/* Wheel Helper Hint */}
-        <div className="flex items-center gap-2 font-mono text-[11px] text-white/40">
-          <RotateCw size={12} className="text-[#3df5ff]" />
-          <span>WHEEL INTERACTION: SCROLL, DRAG, OR CLICK SIDE CARDS TO ROTATE</span>
+        <div className="flex items-center gap-1.5 font-mono text-[10px] sm:text-[11px] text-white/40">
+          <RotateCw size={11} className="text-[#3df5ff]" />
+          <span>SWIPE OR TAP SIDES TO ROTATE WHEEL</span>
         </div>
       </div>
     </div>

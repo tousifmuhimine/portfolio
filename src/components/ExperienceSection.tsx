@@ -123,7 +123,7 @@ export default function ExperienceSection({ experience, education }: ExperienceS
               return (
                 <div
                   key={item.company}
-                  className="relative border border-white/10 bg-[#07080a] backdrop-blur-xl transition-all duration-300 hover:border-white/20"
+                  className="relative rounded-xl sm:rounded-2xl border border-white/10 bg-[#07080a] backdrop-blur-xl transition-all duration-300 hover:border-white/20"
                 >
                   {/* Timeline Dot Indicator */}
                   <div
@@ -138,10 +138,10 @@ export default function ExperienceSection({ experience, education }: ExperienceS
                   <button
                     type="button"
                     onClick={() => toggleAccordion(idx)}
-                    className="flex w-full items-center justify-between p-5 text-left transition-colors hover:bg-white/[0.02]"
+                    className="flex w-full items-center justify-between p-4 sm:p-5 text-left transition-colors hover:bg-white/[0.02]"
                   >
-                    <div>
-                      <div className="flex flex-wrap items-center gap-3 font-mono text-xs text-white/50">
+                    <div className="pr-2">
+                      <div className="flex flex-wrap items-center gap-2 sm:gap-3 font-mono text-xs text-white/50">
                         <span className="flex items-center gap-1 text-[#3df5ff]">
                           <Calendar size={12} />
                           {item.time}
@@ -152,18 +152,18 @@ export default function ExperienceSection({ experience, education }: ExperienceS
                           {item.place}
                         </span>
                       </div>
-                      <h3 className="mt-2 text-lg font-bold text-white md:text-xl">
+                      <h3 className="mt-2 text-base sm:text-lg font-bold text-white md:text-xl">
                         {item.role} —{' '}
                         <span className="text-[#3df5ff]">{item.company}</span>
                       </h3>
                     </div>
 
                     <div
-                      className={`flex h-8 w-8 shrink-0 items-center justify-center border border-white/10 bg-white/5 text-white/60 transition-transform duration-300 ${
+                      className={`flex h-7 w-7 sm:h-8 sm:w-8 shrink-0 items-center justify-center rounded-lg border border-white/10 bg-white/5 text-white/60 transition-transform duration-300 ${
                         isOpen ? 'rotate-180 border-[#3df5ff] text-[#3df5ff]' : ''
                       }`}
                     >
-                      <ChevronDown size={16} />
+                      <ChevronDown size={15} />
                     </div>
                   </button>
 
@@ -175,9 +175,9 @@ export default function ExperienceSection({ experience, education }: ExperienceS
                         animate={{ opacity: 1, height: 'auto' }}
                         exit={{ opacity: 0, height: 0 }}
                         transition={{ duration: 0.3 }}
-                        className="overflow-hidden border-t border-white/10 px-5 pb-5 pt-3"
+                        className="overflow-hidden border-t border-white/10 px-4 sm:px-5 pb-4 sm:pb-5 pt-3"
                       >
-                        <ul className="space-y-2 text-sm text-[#8e929b]">
+                        <ul className="space-y-2 text-xs sm:text-sm text-[#8e929b]">
                           {item.bullets.map((bullet) => (
                             <li key={bullet} className="flex items-start gap-2.5">
                               <span className="text-[#3df5ff] font-mono mt-0.5">›</span>
@@ -200,7 +200,7 @@ export default function ExperienceSection({ experience, education }: ExperienceS
             {education.map((item, idx) => (
               <div
                 key={item.school}
-                className="relative border border-white/10 bg-[#07080a] p-5 backdrop-blur-xl transition-all duration-300 hover:border-white/20"
+                className="relative rounded-xl sm:rounded-2xl border border-white/10 bg-[#07080a] p-4 sm:p-5 backdrop-blur-xl transition-all duration-300 hover:border-white/20"
               >
                 {/* Education Timeline Dot */}
                 <div className="absolute -left-[31px] md:-left-[47px] top-5 flex h-4 w-4 items-center justify-center bg-[#c8ff3d] text-[#07080a]">
@@ -208,8 +208,8 @@ export default function ExperienceSection({ experience, education }: ExperienceS
                 </div>
 
                 <div className="font-mono text-xs text-[#c8ff3d]">{item.meta}</div>
-                <h3 className="mt-1 text-lg font-bold text-white md:text-xl">{item.school}</h3>
-                <p className="mt-1 text-sm text-[#8e929b]">{item.detail}</p>
+                <h3 className="mt-1 text-base sm:text-lg font-bold text-white md:text-xl">{item.school}</h3>
+                <p className="mt-1 text-xs sm:text-sm text-[#8e929b]">{item.detail}</p>
               </div>
             ))}
           </div>

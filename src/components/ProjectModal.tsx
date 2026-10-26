@@ -46,15 +46,15 @@ export default function ProjectModal({ project, onClose }: ProjectModalProps) {
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.95, y: 20 }}
           transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
-          className="relative max-h-[90vh] w-full max-w-4xl overflow-y-auto border border-white/20 bg-[#07080a] p-6 text-[#ecebe6] shadow-2xl shadow-cyan-500/10 md:p-8"
+          className="relative max-h-[92vh] w-full max-w-4xl overflow-y-auto rounded-2xl sm:rounded-3xl border border-white/20 bg-[#07080a] p-4 sm:p-6 md:p-8 text-[#ecebe6] shadow-2xl shadow-cyan-500/10"
         >
           {/* Close Button */}
           <button
             type="button"
             onClick={onClose}
-            className="absolute right-4 top-4 flex h-9 w-9 items-center justify-center border border-white/10 bg-white/5 text-white/50 transition-colors hover:border-[#3df5ff] hover:text-[#3df5ff]"
+            className="absolute right-3 top-3 sm:right-4 sm:top-4 flex h-8 w-8 sm:h-9 sm:w-9 items-center justify-center rounded-full border border-white/10 bg-white/5 text-white/50 transition-colors hover:border-[#3df5ff] hover:text-[#3df5ff]"
           >
-            <X size={18} />
+            <X size={16} />
           </button>
 
           {/* Top Category & Metric Header */}

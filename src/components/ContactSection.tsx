@@ -46,29 +46,29 @@ export default function ContactSection() {
           Currently taking selective engineering roles, AI product consulting, and full-stack system contracts.
         </p>
 
-        {/* Unified Luxury Interactive Email Card (Replaces the messy terminal box) */}
+        {/* Unified Luxury Interactive Email Card */}
         <motion.div
           initial={{ opacity: 0, y: 25 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6, delay: 0.2 }}
-          className="mt-12 mx-auto max-w-xl rounded-full border border-white/15 bg-[#07080a]/90 p-2 sm:p-2.5 pl-5 sm:pl-6 shadow-2xl backdrop-blur-2xl flex flex-col sm:flex-row items-center justify-between gap-3"
+          className="mt-10 sm:mt-12 mx-auto max-w-xl rounded-2xl sm:rounded-full border border-white/15 bg-[#07080a]/90 p-3.5 sm:p-2.5 sm:pl-6 shadow-2xl backdrop-blur-2xl flex flex-col sm:flex-row items-center justify-between gap-3.5 sm:gap-3"
         >
           {/* Email Address with Icon */}
-          <div className="flex items-center gap-3">
-            <div className="flex h-9 w-9 items-center justify-center rounded-full border border-[#3df5ff]/30 bg-[#3df5ff]/10 text-[#3df5ff]">
-              <Mail size={16} />
+          <div className="flex items-center gap-2.5 sm:gap-3 w-full sm:w-auto justify-center sm:justify-start">
+            <div className="flex h-8 w-8 sm:h-9 sm:w-9 shrink-0 items-center justify-center rounded-full border border-[#3df5ff]/30 bg-[#3df5ff]/10 text-[#3df5ff]">
+              <Mail size={15} />
             </div>
             <a
               href="mailto:abdullahtsn13@gmail.com"
-              className="font-mono text-xs sm:text-sm font-semibold tracking-wide text-white hover:text-[#3df5ff] transition-colors"
+              className="font-mono text-xs sm:text-sm font-semibold tracking-wide text-white hover:text-[#3df5ff] transition-colors break-all sm:break-normal"
             >
               abdullahtsn13@gmail.com
             </a>
           </div>
 
           {/* Action Buttons: Copy & Send */}
-          <div className="flex items-center gap-2 w-full sm:w-auto justify-end">
+          <div className="flex items-center gap-2 w-full sm:w-auto justify-center sm:justify-end">
             {/* Copy Button with Animated Feedback */}
             <button
               type="button"

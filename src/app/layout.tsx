@@ -28,6 +28,13 @@ export const metadata: Metadata = {
   title: 'Abdullah Al Muhaimine (Tousif) | AI Full-Stack Portfolio',
   description:
     'Portfolio of Abdullah Al Muhaimine (Tousif): AI Developer & Full-Stack Engineer. Fine-tuning LLMs, multi-agent reasoning, vector retrieval, and production systems.',
+  verification: {
+    google: 'nFr7EuQG7ZnzyvVPFbTzEoT7j5IIO5c7lZt0dVciL2s',
+  },
+  robots: {
+    index: true,
+    follow: true,
+  },
 };
 
 export default function RootLayout({

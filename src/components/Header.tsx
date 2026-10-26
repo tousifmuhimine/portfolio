@@ -46,7 +46,8 @@ export default function Header({ onOpenPalette }: { onOpenPalette?: () => void }
           </span>
           <span className="font-mono text-xs text-white/40">—</span>
           <span className="font-mono text-xs font-bold tracking-widest text-[#ecebe6] uppercase group-hover:text-[#3df5ff] transition-colors">
-            ABDULLAH AL MUHAIMINE
+            <span className="hidden sm:inline">ABDULLAH AL MUHAIMINE</span>
+            <span className="inline sm:hidden">TOUSIF</span>
           </span>
         </a>
 
