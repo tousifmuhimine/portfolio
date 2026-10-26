@@ -30,6 +30,12 @@ export default function MagneticButton({
 
   const handleMouseMove = useCallback(
     (e: React.MouseEvent) => {
+      const isTouch =
+        typeof window !== 'undefined' &&
+        (window.matchMedia('(pointer: coarse)').matches ||
+          window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+      if (isTouch) return;
+
       const el = ref.current;
       if (!el) return;
       const rect = el.getBoundingClientRect();

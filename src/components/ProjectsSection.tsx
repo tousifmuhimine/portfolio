@@ -4,10 +4,11 @@ import { useState, MouseEvent } from 'react';
 import Image from 'next/image';
 import { motion, AnimatePresence } from 'motion/react';
 import ProjectsWheel from './ProjectsWheel';
+import HorizontalProjectsScroll from './HorizontalProjectsScroll';
 import ProjectModal from './ProjectModal';
 import { Project } from './ProjectCard';
 import SectionReveal from './SectionReveal';
-import { Sparkles, Disc, List, ExternalLink, Github, ArrowUpRight } from 'lucide-react';
+import { Sparkles, Disc, List, ExternalLink, Github, ArrowUpRight, Layers } from 'lucide-react';
 
 interface ProjectsSectionProps {
   projects: Project[];
@@ -16,7 +17,7 @@ interface ProjectsSectionProps {
 export default function ProjectsSection({ projects }: ProjectsSectionProps) {
   const [selectedCategory, setSelectedCategory] = useState<string>('All');
   const [activeProject, setActiveProject] = useState<Project | null>(null);
-  const [viewMode, setViewMode] = useState<'wheel' | 'list'>('wheel');
+  const [viewMode, setViewMode] = useState<'wheel' | 'showcase' | 'list'>('wheel');
 
   // Floating cursor preview state for matrix list mode
   const [hoveredListProject, setHoveredListProject] = useState<Project | null>(null);
@@ -55,7 +56,7 @@ export default function ProjectsSection({ projects }: ProjectsSectionProps) {
   return (
     <section
       id="projects"
-      className="relative z-10 scroll-mt-24 py-24 md:py-32"
+      className="relative z-10 scroll-mt-24 py-20 md:py-28"
     >
       <div className="section-container">
         {/* Section Header */}
@@ -71,13 +72,13 @@ export default function ProjectsSection({ projects }: ProjectsSectionProps) {
                 <span className="text-[#3df5ff]">Application Layers</span>
               </h2>
               <p className="mt-3 max-w-2xl font-mono text-xs text-white/50">
-                3D circular carousel wheel: scroll, drag, or click to rotate through system architectures.
+                3D circular carousel wheel: scroll or drag to rotate through system architectures. Switch to Showcase for locked horizontal 3D cards.
               </p>
             </div>
 
             {/* Layout Mode & Category Controls */}
             <div className="flex flex-wrap items-center gap-4">
-              {/* Layout Switcher */}
+              {/* Layout Switcher: 3D Wheel (main), Showcase (second), Matrix (third) */}
               <div className="flex items-center border border-white/10 bg-[#07080a] p-1 font-mono text-xs">
                 <button
                   type="button"
@@ -91,6 +92,19 @@ export default function ProjectsSection({ projects }: ProjectsSectionProps) {
                 >
                   <Disc size={13} />
                   <span>3D WHEEL</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setViewMode('showcase')}
+                  className={`flex items-center gap-1.5 px-3 py-1.5 transition-colors ${
+                    viewMode === 'showcase'
+                      ? 'bg-white/10 text-[#3df5ff]'
+                      : 'text-white/40 hover:text-white'
+                  }`}
+                  title="Locked Horizontal Showcase"
+                >
+                  <Layers size={13} />
+                  <span>SHOWCASE</span>
                 </button>
                 <button
                   type="button"
@@ -127,7 +141,7 @@ export default function ProjectsSection({ projects }: ProjectsSectionProps) {
           </div>
         </SectionReveal>
 
-        {/* MODE 1: 3D Circular Wheel Carousel */}
+        {/* MODE 1: 3D Circular Wheel Carousel (Default) */}
         {viewMode === 'wheel' && (
           <div className="mt-8">
             <ProjectsWheel
@@ -137,7 +151,15 @@ export default function ProjectsSection({ projects }: ProjectsSectionProps) {
           </div>
         )}
 
-        {/* MODE 2: Editorial Matrix List with Cursor Floating Preview */}
+        {/* MODE 2: Locked Horizontal Showcase (Second) */}
+        {viewMode === 'showcase' && (
+          <HorizontalProjectsScroll
+            projects={filteredProjects}
+            onInspect={(p) => setActiveProject(p)}
+          />
+        )}
+
+        {/* MODE 3: Editorial Matrix List with Cursor Floating Preview */}
         {viewMode === 'list' && (
           <div
             className="relative mt-12 divide-y divide-white/10 border-y border-white/10"

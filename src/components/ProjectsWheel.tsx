@@ -52,13 +52,17 @@ export default function ProjectsWheel({ projects, onInspect }: ProjectsWheelProp
     setActiveIndex((prev) => (prev - 1 + total) % total);
   }, [total]);
 
-  // Mouse wheel scroll to smoothly rotate the wheel
+  // Mouse wheel scroll to smoothly rotate the wheel - locked horizontally only
   useEffect(() => {
     const container = containerRef.current;
     if (!container) return;
 
     const handleWheel = (e: globalThis.WheelEvent) => {
-      if (Math.abs(e.deltaY) > 20 || Math.abs(e.deltaX) > 20) {
+      // Prevent page from scrolling vertically when cursor is over the 3D wheel
+      if (Math.abs(e.deltaY) > 6 || Math.abs(e.deltaX) > 6) {
+        e.preventDefault();
+        e.stopPropagation();
+
         if (wheelLockRef.current) return;
         wheelLockRef.current = true;
 
@@ -70,11 +74,11 @@ export default function ProjectsWheel({ projects, onInspect }: ProjectsWheelProp
 
         setTimeout(() => {
           wheelLockRef.current = false;
-        }, 360);
+        }, 260);
       }
     };
 
-    container.addEventListener('wheel', handleWheel, { passive: true });
+    container.addEventListener('wheel', handleWheel, { passive: false });
     return () => container.removeEventListener('wheel', handleWheel);
   }, [nextProject, prevProject]);
 

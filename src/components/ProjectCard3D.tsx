@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useRef, MouseEvent } from 'react';
+import { useState, useRef, useEffect, MouseEvent } from 'react';
 import Image from 'next/image';
 import { ExternalLink, Github, Eye, Sparkles, Layers } from 'lucide-react';
 import { Project } from './ProjectCard';
@@ -17,9 +17,16 @@ export default function ProjectCard3D({ project, index, onInspect }: ProjectCard
   const [rotateY, setRotateY] = useState(0);
   const [glarePosition, setGlarePosition] = useState({ x: 50, y: 50, opacity: 0 });
   const [isHovered, setIsHovered] = useState(false);
+  const [isTouchOrReduced, setIsTouchOrReduced] = useState(false);
+
+  useEffect(() => {
+    const isTouch = window.matchMedia('(pointer: coarse)').matches;
+    const isReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    setIsTouchOrReduced(isTouch || isReduced);
+  }, []);
 
   const handleMouseMove = (e: MouseEvent<HTMLDivElement>) => {
-    if (!cardRef.current) return;
+    if (isTouchOrReduced || !cardRef.current) return;
     const rect = cardRef.current.getBoundingClientRect();
     const x = e.clientX - rect.left;
     const y = e.clientY - rect.top;
@@ -27,8 +34,11 @@ export default function ProjectCard3D({ project, index, onInspect }: ProjectCard
     const centerX = rect.width / 2;
     const centerY = rect.height / 2;
 
-    const rotX = ((y - centerY) / centerY) * -12;
-    const rotY = ((x - centerX) / centerX) * 12;
+    // Restrained 3D tilt strictly clamped to max ±10deg following cursor
+    const rawRotX = ((y - centerY) / centerY) * -10;
+    const rawRotY = ((x - centerX) / centerX) * 10;
+    const rotX = Math.max(-10, Math.min(10, rawRotX));
+    const rotY = Math.max(-10, Math.min(10, rawRotY));
 
     setRotateX(rotX);
     setRotateY(rotY);
@@ -36,14 +46,17 @@ export default function ProjectCard3D({ project, index, onInspect }: ProjectCard
     setGlarePosition({
       x: (x / rect.width) * 100,
       y: (y / rect.height) * 100,
-      opacity: 0.25,
+      opacity: 0.28,
     });
   };
 
-  const handleMouseEnter = () => setIsHovered(true);
+  const handleMouseEnter = () => {
+    if (!isTouchOrReduced) setIsHovered(true);
+  };
 
   const handleMouseLeave = () => {
     setIsHovered(false);
+    // Smooth spring-back to 0
     setRotateX(0);
     setRotateY(0);
     setGlarePosition((prev) => ({ ...prev, opacity: 0 }));
@@ -64,26 +77,30 @@ export default function ProjectCard3D({ project, index, onInspect }: ProjectCard
         onMouseLeave={handleMouseLeave}
         onClick={() => onInspect(project)}
         style={{
-          transform: `rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(${isHovered ? 1.02 : 1}, ${isHovered ? 1.02 : 1}, 1)`,
+          transform: isTouchOrReduced
+            ? 'none'
+            : `rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(${isHovered ? 1.02 : 1}, ${isHovered ? 1.02 : 1}, 1)`,
           transformStyle: 'preserve-3d',
           transition: isHovered
-            ? 'transform 0.1s ease-out'
-            : 'transform 0.5s cubic-bezier(0.2, 0.8, 0.2, 1)',
+            ? 'transform 0.12s ease-out'
+            : 'transform 0.65s cubic-bezier(0.175, 0.885, 0.32, 1.275)',
         }}
-        className="group relative flex h-full cursor-pointer flex-col overflow-hidden border border-white/10 bg-[#07080a] p-5 backdrop-blur-xl transition-all duration-300 hover:border-[#3df5ff]/50 hover:shadow-[0_0_40px_rgba(61,245,255,0.12)]"
+        className="group relative flex h-full cursor-pointer flex-col overflow-hidden border border-white/10 bg-[#07080a] p-5 backdrop-blur-xl transition-[border-color,box-shadow] duration-300 hover:border-[#3df5ff]/50 hover:shadow-[0_0_35px_rgba(61,245,255,0.14)]"
       >
-        {/* Dynamic Specular Holographic Glare */}
-        <div
-          className="pointer-events-none absolute inset-0 z-30 transition-opacity duration-300"
-          style={{
-            background: `radial-gradient(circle 320px at ${glarePosition.x}% ${glarePosition.y}%, rgba(61, 245, 255, 0.2), transparent 70%)`,
-            opacity: glarePosition.opacity,
-          }}
-        />
+        {/* Cursor-following radial spotlight / glare */}
+        {!isTouchOrReduced && (
+          <div
+            className="pointer-events-none absolute inset-0 z-30 transition-opacity duration-300"
+            style={{
+              background: `radial-gradient(circle 340px at ${glarePosition.x}% ${glarePosition.y}%, rgba(61, 245, 255, 0.22), transparent 70%)`,
+              opacity: glarePosition.opacity,
+            }}
+          />
+        )}
 
-        {/* Terminal Corner Bar: [01] / TYPE / 2026 */}
+        {/* Top Header Tag: [01] / CATEGORY / 2026_SYS */}
         <div
-          style={{ transform: 'translateZ(25px)' }}
+          style={{ transform: isTouchOrReduced ? 'none' : 'translateZ(25px)' }}
           className="mb-4 flex items-center justify-between border-b border-white/10 pb-3 font-mono text-xs"
         >
           <div className="flex items-center gap-2">
@@ -96,42 +113,26 @@ export default function ProjectCard3D({ project, index, onInspect }: ProjectCard
           </span>
         </div>
 
-        {/* 3D Layer 1: Image Frame with Chromatic / RGB Split Distortion Simulation */}
+        {/* Image Frame with slow scale-up and subtle saturation shift */}
         <div
-          style={{ transform: 'translateZ(35px)' }}
+          style={{ transform: isTouchOrReduced ? 'none' : 'translateZ(35px)' }}
           className="relative aspect-[16/10] overflow-hidden border border-white/10 bg-[#0d1017]"
         >
-          {/* Base Image */}
           <Image
             src={project.imageUrl}
             alt={`${project.title} screenshot`}
             width={900}
             height={620}
-            className={`h-full w-full object-cover grayscale contrast-110 transition-all duration-700 ease-out group-hover:scale-110 group-hover:grayscale-0 ${
-              isHovered ? 'filter-none' : ''
-            }`}
+            className="h-full w-full object-cover filter saturate-[0.8] contrast-[1.05] transition-all duration-700 ease-out group-hover:scale-105 group-hover:saturate-115"
           />
 
-          {/* Simulated RGB Shift Overlay on Hover */}
-          {isHovered && (
-            <div
-              className="pointer-events-none absolute inset-0 mix-blend-screen opacity-40 transition-opacity duration-300"
-              style={{
-                backgroundImage: `url(${project.imageUrl})`,
-                backgroundSize: 'cover',
-                backgroundPosition: 'center',
-                filter: 'drop-shadow(2px 0 0 rgba(255,0,80,0.7)) drop-shadow(-2px 0 0 rgba(0,255,255,0.7))',
-              }}
-            />
-          )}
-
           {/* Bottom Gradient Fade */}
-          <div className="absolute inset-0 bg-gradient-to-t from-[#07080a] via-transparent to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-t from-[#07080a] via-transparent to-transparent opacity-80" />
 
           {/* Floating Metrics Badge */}
           {project.metrics && (
             <div
-              style={{ transform: 'translateZ(50px)' }}
+              style={{ transform: isTouchOrReduced ? 'none' : 'translateZ(45px)' }}
               className="absolute bottom-3 left-3 flex items-center gap-1.5 border border-[#3df5ff]/40 bg-[#07080a]/90 px-2.5 py-1 font-mono text-[11px] font-semibold text-[#3df5ff] backdrop-blur-md"
             >
               <Sparkles size={11} />
@@ -141,32 +142,44 @@ export default function ProjectCard3D({ project, index, onInspect }: ProjectCard
 
           {/* Inspect Reticle Icon */}
           <div
-            style={{ transform: 'translateZ(55px)' }}
+            style={{ transform: isTouchOrReduced ? 'none' : 'translateZ(50px)' }}
             className="absolute right-3 top-3 flex h-8 w-8 items-center justify-center border border-white/20 bg-[#07080a]/80 text-white opacity-0 transition-all duration-300 group-hover:opacity-100 hover:border-[#3df5ff] hover:text-[#3df5ff]"
           >
             <Eye size={14} />
           </div>
         </div>
 
-        {/* 3D Layer 2: Information */}
-        <div style={{ transform: 'translateZ(30px)' }} className="mt-5 flex flex-1 flex-col">
-          <h3 className="text-xl font-bold text-white transition-colors group-hover:text-[#3df5ff]">
-            {project.title}
-          </h3>
+        {/* Project Info with Title Roll/Swap effect */}
+        <div
+          style={{ transform: isTouchOrReduced ? 'none' : 'translateZ(30px)' }}
+          className="mt-5 flex flex-1 flex-col"
+        >
+          {/* Title Swap / Roll Effect */}
+          <div className="relative h-7 overflow-hidden">
+            <div className="transition-transform duration-300 ease-out group-hover:-translate-y-7">
+              <h3 className="h-7 text-xl font-bold text-white leading-7 line-clamp-1">
+                {project.title}
+              </h3>
+              <h3 className="h-7 text-xl font-bold text-[#3df5ff] leading-7 flex items-center gap-1.5 line-clamp-1">
+                <span>{project.title}</span>
+                <span className="font-mono text-xs opacity-80">↗</span>
+              </h3>
+            </div>
+          </div>
 
           <p className="mt-2 text-xs leading-relaxed text-[#8e929b] md:text-sm line-clamp-2">
             {project.description}
           </p>
 
-          {/* Sliding Monospace Tech Tags */}
+          {/* Staggered Monospace Tech Tags */}
           <div className="mt-auto pt-4">
             <div className="flex flex-wrap gap-1.5">
               {project.techStack.split(',').map((tech, idx) => (
                 <span
                   key={idx}
-                  className="border border-white/5 bg-white/[0.03] px-2 py-0.5 font-mono text-[10px] text-white/70 transition-transform duration-200 group-hover:border-[#3df5ff]/30 group-hover:text-[#3df5ff]"
+                  className="border border-white/10 bg-white/[0.03] px-2 py-0.5 font-mono text-[10px] text-white/70 transition-all duration-300 group-hover:-translate-y-0.5 group-hover:border-[#3df5ff]/40 group-hover:bg-[#3df5ff]/10 group-hover:text-[#3df5ff]"
                   style={{
-                    transitionDelay: `${idx * 25}ms`,
+                    transitionDelay: `${idx * 35}ms`,
                   }}
                 >
                   {tech.trim()}
@@ -175,9 +188,9 @@ export default function ProjectCard3D({ project, index, onInspect }: ProjectCard
             </div>
           </div>
 
-          {/* 3D Layer 3: Action Buttons */}
+          {/* Action Row */}
           <div
-            style={{ transform: 'translateZ(40px)' }}
+            style={{ transform: isTouchOrReduced ? 'none' : 'translateZ(40px)' }}
             className="mt-5 flex items-center justify-between border-t border-white/10 pt-4"
           >
             <span className="flex items-center gap-1.5 font-mono text-xs font-semibold text-white/70 transition-colors group-hover:text-[#3df5ff]">

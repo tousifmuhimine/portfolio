@@ -1,20 +1,18 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { motion } from 'motion/react';
+import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { useGSAP } from '@gsap/react';
 import {
   ArrowUpRight,
   Download,
-  Terminal,
-  Cpu,
-  Sparkles,
-  Layers,
-  ShieldCheck,
-  ChevronRight,
-  ArrowDown,
 } from 'lucide-react';
 import MagneticButton from './MagneticButton';
 import TextScramble from './TextScramble';
+
+gsap.registerPlugin(ScrollTrigger);
 
 interface HeroProps {
   stats: [string, string][];
@@ -29,9 +27,68 @@ const rotatingRoles = [
 ];
 
 export default function HeroSection({ stats }: HeroProps) {
+  const heroRef = useRef<HTMLElement>(null);
+  const contentRef = useRef<HTMLDivElement>(null);
+  const headlineRef = useRef<HTMLDivElement>(null);
+
   const [rotatingIndex, setRotatingIndex] = useState(0);
   const [subText, setSubText] = useState('');
   const [isDeleting, setIsDeleting] = useState(false);
+
+  // Layered Depth: Subtle mouse parallax on headline block (~20-28px max)
+  useEffect(() => {
+    const isTouch =
+      window.matchMedia('(pointer: coarse)').matches ||
+      window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (isTouch) return;
+
+    let targetX = 0;
+    let targetY = 0;
+    let currentX = 0;
+    let currentY = 0;
+    let animId: number;
+
+    const handleMouseMove = (e: MouseEvent) => {
+      targetX = (e.clientX / window.innerWidth - 0.5) * 28;
+      targetY = (e.clientY / window.innerHeight - 0.5) * 24;
+    };
+
+    const animate = () => {
+      currentX += (targetX - currentX) * 0.08;
+      currentY += (targetY - currentY) * 0.08;
+      if (headlineRef.current) {
+        headlineRef.current.style.transform = `translate3d(${currentX}px, ${currentY}px, 0)`;
+      }
+      animId = requestAnimationFrame(animate);
+    };
+
+    window.addEventListener('mousemove', handleMouseMove, { passive: true });
+    animId = requestAnimationFrame(animate);
+
+    return () => {
+      window.removeEventListener('mousemove', handleMouseMove);
+      cancelAnimationFrame(animId);
+    };
+  }, []);
+
+  // Scroll-linked scrub: Hero content gently drifts up and fades as user scrolls away
+  useGSAP(() => {
+    if (!heroRef.current || !contentRef.current) return;
+    const isReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (isReduced) return;
+
+    gsap.to(contentRef.current, {
+      y: -80,
+      opacity: 0,
+      ease: 'none',
+      scrollTrigger: {
+        trigger: heroRef.current,
+        start: 'top top',
+        end: 'bottom 45%',
+        scrub: 1,
+      },
+    });
+  }, { scope: heroRef });
 
   // Rotating dynamic typewriter capabilities
   useEffect(() => {
@@ -58,15 +115,16 @@ export default function HeroSection({ stats }: HeroProps) {
 
   return (
     <section
+      ref={heroRef}
       id="about"
       className="relative z-10 flex min-h-screen flex-col justify-between overflow-hidden pt-28 pb-0 md:pt-36"
     >
-      <div className="section-container relative flex-1">
-        {/* Exact Eyebrow from Screenshot: > STATUS: ONLINE · BASED IN DHAKA */}
+      <div ref={contentRef} className="section-container relative flex-1 will-change-transform">
+        {/* Exact Eyebrow: > STATUS: ONLINE · BASED IN DHAKA */}
         <motion.div
           initial={{ opacity: 0, y: -15 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
+          transition={{ duration: 0.6, delay: 0.1 }}
           className="font-mono text-xs font-semibold tracking-wider text-white/50"
         >
           <span className="text-[#3df5ff]">{'> '}</span>
@@ -75,14 +133,20 @@ export default function HeroSection({ stats }: HeroProps) {
           <span>BASED IN DHAKA</span>
         </motion.div>
 
-        {/* Giant Main Heading Exactly Matching Reference Image */}
-        <div className="mt-6 sm:mt-8 select-none">
+        {/* Giant Main Heading with Layered Mouse Parallax */}
+        <motion.div
+          ref={headlineRef}
+          initial={{ opacity: 0, y: 25 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 0.25, ease: [0.16, 1, 0.3, 1] }}
+          className="mt-6 sm:mt-8 select-none will-change-transform"
+        >
           {/* Row 1: ABDULLAH AL MUHAIMINE (TOUSIF) */}
           <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
             <h1 className="text-4xl sm:text-6xl md:text-7xl lg:text-[8.5vw] font-black leading-[0.95] tracking-tighter text-[#ecebe6] uppercase">
               <TextScramble
                 text="Abdullah Al Muhaimine"
-                delay={150}
+                delay={200}
                 speed={22}
               />
             </h1>
@@ -102,10 +166,15 @@ export default function HeroSection({ stats }: HeroProps) {
               </span>
             </div>
           </div>
-        </div>
+        </motion.div>
 
-        {/* Bottom Split Narrative Row Matching Reference Image */}
-        <div className="mt-8 sm:mt-12 grid items-end gap-6 sm:gap-8 pb-12 sm:pb-16 md:grid-cols-[1.2fr_0.8fr]">
+        {/* Bottom Split Narrative Row */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.7, delay: 0.45 }}
+          className="mt-8 sm:mt-12 grid items-end gap-6 sm:gap-8 pb-12 sm:pb-16 md:grid-cols-[1.2fr_0.8fr]"
+        >
           {/* Left Subtext: Role & Dynamic Terminal Typing */}
           <div>
             <div className="font-mono text-sm sm:text-base md:text-xl font-bold text-white">
@@ -120,17 +189,17 @@ export default function HeroSection({ stats }: HeroProps) {
               <span className="typing-cursor" />
             </div>
 
-            {/* Core Action Buttons */}
+            {/* Core Action Buttons with Magnetic Attraction */}
             <div className="mt-5 sm:mt-6 flex flex-wrap items-center gap-2.5 sm:gap-3">
-              <MagneticButton as="a" href="#projects" className="btn btn-primary text-xs sm:text-sm py-2.5 px-4 sm:py-3 sm:px-5" strength={0.25}>
+              <MagneticButton as="a" href="#projects" className="btn btn-primary text-xs sm:text-sm py-2.5 px-4 sm:py-3 sm:px-5" strength={0.3}>
                 <span>EXPLORE WORK</span>
                 <ArrowUpRight size={15} />
               </MagneticButton>
-              <MagneticButton as="a" href="#resumes" className="btn btn-secondary text-xs sm:text-sm py-2.5 px-4 sm:py-3 sm:px-5" strength={0.25}>
+              <MagneticButton as="a" href="#resumes" className="btn btn-secondary text-xs sm:text-sm py-2.5 px-4 sm:py-3 sm:px-5" strength={0.3}>
                 <span>RESUMES</span>
                 <Download size={15} />
               </MagneticButton>
-              <MagneticButton as="a" href="#contact" className="btn btn-secondary border-[#3df5ff]/40 text-[#3df5ff] text-xs sm:text-sm py-2.5 px-4 sm:py-3 sm:px-5" strength={0.25}>
+              <MagneticButton as="a" href="#contact" className="btn btn-secondary border-[#3df5ff]/40 text-[#3df5ff] text-xs sm:text-sm py-2.5 px-4 sm:py-3 sm:px-5" strength={0.3}>
                 <span>CONTACT</span>
               </MagneticButton>
             </div>
@@ -152,10 +221,10 @@ export default function HeroSection({ stats }: HeroProps) {
               ))}
             </div>
           </div>
-        </div>
+        </motion.div>
       </div>
 
-      {/* Tilted Neon Cyan Ribbon Banner Across Bottom - Safe for mobile */}
+      {/* Tilted Neon Cyan Ribbon Banner Across Bottom */}
       <div className="relative w-full overflow-hidden py-1">
         <div className="w-[104%] -ml-[2%] overflow-hidden border-y border-[#3df5ff] bg-[#3df5ff] py-2.5 sm:py-3.5 select-none shadow-[0_0_35px_rgba(61,245,255,0.4)] rotate-[-1deg]">
           <div className="flex overflow-hidden whitespace-nowrap">

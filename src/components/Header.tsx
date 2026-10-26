@@ -3,6 +3,7 @@
 import { useEffect, useState, useRef, useCallback } from 'react';
 import { Download, Menu, X, Command } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
+import MagneticButton from './MagneticButton';
 
 const navItems = [
   { name: '// WORK', href: '#projects' },
@@ -51,23 +52,29 @@ export default function Header({ onOpenPalette }: { onOpenPalette?: () => void }
           </span>
         </a>
 
-        {/* Center Nav: // WORK // ABOUT // STACK // CONTACT */}
-        <div className="hidden items-center gap-8 lg:flex">
+        {/* Center Nav: // WORK // ABOUT // STACK // CONTACT with Magnetic Attraction */}
+        <div className="hidden items-center gap-6 lg:flex">
           {navItems.map((item) => {
             const sectionId = item.href.slice(1);
             const isActive = activeSection === sectionId;
             return (
-              <a
+              <MagneticButton
                 key={item.name}
+                as="a"
                 href={item.href}
-                className={`font-mono text-xs font-semibold tracking-widest transition-colors duration-200 ${
-                  isActive
-                    ? 'text-white'
-                    : 'text-white/60 hover:text-[#3df5ff]'
-                }`}
+                strength={0.3}
+                className="py-1 px-1.5"
               >
-                {item.name}
-              </a>
+                <span
+                  className={`font-mono text-xs font-semibold tracking-widest transition-colors duration-200 ${
+                    isActive
+                      ? 'text-white'
+                      : 'text-white/60 hover:text-[#3df5ff]'
+                  }`}
+                >
+                  {item.name}
+                </span>
+              </MagneticButton>
             );
           })}
         </div>
